@@ -3,6 +3,8 @@
 int main()
 {
     char fruit[]="apple";
-    printf("%d",strlen(fruit));
+    printf("%d\n",strlen(fruit));
+    printf("hello!");
     return 0;
+    
 }
