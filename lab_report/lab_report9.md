@@ -64,10 +64,55 @@
 
 ## 代码实现
 
-![提交记录截图](result33.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main()
+{
+	int n = 0;
+	int arr[1001] = { 0 };
+	memset(arr, 0, sizeof(arr));
+	scanf("%d", &n);
+	int temp = n-1;
+	int pre = 0;
+	int aft = 0;
+    scanf(" %d",&pre);
+	while (temp--)
+	{
+		scanf(" %d", &aft);
+		int num = aft - pre;
+        pre=aft;
+		if (num < 0)
+		{
+			num = -num;
+		}
+        if(num>=n||num<0)
+        {
+            continue;
+        }
+		if (arr[num] == 0)
+		{
+			arr[num] = 1;
+		}
+	}
+	int flat = 1;
+	for (int i = 1; i < n; i++)
+	{
+		if (arr[i] != 1)
+		{
+			flat = 0;
+		}
+	}
+	if (flat == 0)
+	{
+		printf("Not jolly\n");
+	}
+	else
+	{
+		printf("Jolly\n");
+	}
+}
 ```
 
 ---
@@ -112,10 +157,31 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result34.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int cmp(const void* e1, const void* e2)
+{
+	int* p1 = (int*)e1;
+	int* p2 = (int*)e2;
+	return (*p1) - (*p2);
+}
+int main()
+{
+	int n = 0;
+	scanf("%d", &n);
+	int* arr = (int*)malloc(n * sizeof(int));
+	for (int i = 0; i < n; i++)
+	{
+		scanf(" %d", &arr[i]);
+	}
+	qsort(arr, n, sizeof(int), cmp);
+	for (int i = 0; i < n; i++)
+		printf("%d ", arr[i]);
+	free(arr);
+	return 0;
+}
 ```
 
 ---
@@ -168,10 +234,54 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result35.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct stu
+{
+	char name[21];
+	int year;
+	int month;
+	int date;
+}stu;
+int cmp(const void* e1, const void* e2)
+{
+	stu* p1 = (stu*)e1;
+	stu* p2 = (stu*)e2;
+	if (p1->year != p2->year)
+	{
+		return (p1->year) - (p2->year);
+	}
+	if (p1->month != p2->month)
+	{
+		return (p1->month) - (p2->month);
+	}
+	if (p1->date != p2->date)
+	{
+		return (p1->date) - (p2->date);
+	}
+    return 1;
+}
+int main()
+{
+	stu student[101];
+	int n = 0;
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++)
+	{
+		scanf("%s", student[i].name);
+		scanf(" %d", &student[i].year);
+		scanf(" %d", &student[i].month);
+		scanf(" %d", &student[i].date);
+	}
+	qsort(student, n, sizeof(stu), cmp);
+	for (int i = 0; i < n; i++)
+	{
+		printf("%s\n", student[i].name);
+	}
+}
+
 ```
 
 ---
@@ -221,8 +331,40 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result36.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main()
+{
+	int n = 0;
+	int sum = 0;
+	scanf("%d", &n);
+	int* arr1 = (int*)calloc(20002 , sizeof(int));
+	int* arr2 = (int*)calloc(n , sizeof(int));
+	int pos = 0;
+	for (int i = 0; i < n; i++)
+	{
+		int temp = 0;
+		scanf(" %d", &temp);
+		arr1[temp] = 1;
+		arr2[pos++] = temp;
+	}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = i + 1; j < n; j++)
+		{
+			int num = arr2[i] + arr2[j];
+			if (arr1[num] == 1)
+			{
+				sum++;
+                arr1[num]=0;
+			}
+		}
+	}
+	printf("%d\n", sum);
+    free(arr1);
+    free(arr2);
+	return 0;
+}
 ```

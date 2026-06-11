@@ -58,10 +58,88 @@
 
 ## 代码实现
 
-![提交记录截图](result37.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+typedef struct Node
+{
+	int val;
+	int firstpos;
+	struct Node* next;
+}Node;
+
+#define hashsize 10003
+Node* hashtable[hashsize];
+
+int gethash(int x)
+{
+	return (x % hashsize);
+}
+
+int contains(int x)
+{
+	int pos = gethash(x);
+	Node* p = hashtable[pos];
+	while (p)
+	{
+		if (p->val == x)return 1;
+		p = p->next;
+	}
+	return 0;
+}
+
+void insert(int x, int y)
+{
+	int pos = gethash(x);
+	Node* p = (Node*)malloc(sizeof(Node));
+	p->val = x;
+	p->firstpos = y;
+	p->next = hashtable[pos];
+	hashtable[pos] = p;
+}
+
+int print(int x)
+{
+	int pos = gethash(x);
+	Node* p = hashtable[pos];
+	while (p)
+	{
+		if (p->val == x)
+			return (p->firstpos);
+		p = p->next;
+	}
+	return 0;
+}
+
+int main()
+{
+	int n, m;
+	scanf("%d %d", &n, &m);
+	for (int i = 0; i < n; i++)
+	{
+		int num = 0;
+		scanf(" %d", &num);
+		if (!contains(num))
+		{
+			insert(num,i+1);
+		}
+	}
+	for (int i = 0; i < m; i++)
+	{
+		int num = 0;
+		scanf(" %d", &num);
+		if (!contains(num))
+		{
+			printf("-1 ");
+		}
+		else
+		{
+			printf("%d ", print(num));
+		}
+	}
+	return 0;
+}
 ```
 
 ---
@@ -119,10 +197,99 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result38.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int arr[10001];
+int size;
+
+int binary_search(int x)
+{
+	int left = 1;
+	int right = size;
+	while (left <= right)
+	{
+		int mid = (left + right) / 2;
+		if (arr[mid] >= x)
+			right = mid - 1;
+		else
+			left = mid + 1;
+	}
+	return left;
+}
+
+int getrank(int x)
+{
+	return binary_search(x);
+}
+
+int getkth(int x)
+{
+	return arr[x];
+}
+
+int getprecursor(int x)
+{
+	int pos = binary_search(x);
+	if (pos == 1)
+	{
+		return -2147483647;
+	}
+	return arr[pos-1];
+}
+
+int getsuccessor(int x)
+{
+	int pos = binary_search(x+1);
+	
+	if (pos > size)
+	{
+		return 2147483647;
+	}
+	return arr[pos];
+}
+
+void insert(int x)
+{
+	int pos = binary_search(x);
+	for (int i = size; i >= pos; i--)
+	{
+		arr[i + 1] = arr[i];
+	}
+	arr[pos] = x;
+	size++;
+}
+
+int main()
+{
+	int q = 0;
+	scanf("%d", &q);
+	while (q--)
+	{
+		int op, x;
+		scanf("%d %d", &op, &x);
+		switch (op)
+		{
+		case 1:
+			printf("%d\n", getrank(x));
+			break;
+		case 2:
+			printf("%d\n", getkth(x));
+			break;
+		case 3:
+			printf("%d\n", getprecursor(x));
+			break;
+		case 4:
+			printf("%d\n", getsuccessor(x));
+			break;
+		case 5:
+			insert(x);
+			break;
+		}
+	}
+	return 0;
+}
 ```
 
 ---
@@ -181,10 +348,212 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result39.png)
-
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define MAXN 100005
+
+typedef struct {
+    int val;
+    int pri;
+    int cnt;
+    int siz;
+    int l, r;
+} Node;
+
+Node tr[MAXN];
+int tot = 0;
+int root = 0;
+
+int newNode(int val) {
+    ++tot;
+    tr[tot].val = val;
+    tr[tot].pri = rand();
+    tr[tot].cnt = 1;
+    tr[tot].siz = 1;
+    tr[tot].l = tr[tot].r = 0;
+    return tot;
+}
+
+void pushup(int p) {
+    tr[p].siz =
+        tr[tr[p].l].siz +
+        tr[tr[p].r].siz +
+        tr[p].cnt;
+}
+
+void zig(int *p) {
+    int q = tr[*p].l;
+    tr[*p].l = tr[q].r;
+    tr[q].r = *p;
+
+    pushup(*p);
+    pushup(q);
+
+    *p = q;
+}
+
+void zag(int *p) {
+    int q = tr[*p].r;
+    tr[*p].r = tr[q].l;
+    tr[q].l = *p;
+
+    pushup(*p);
+    pushup(q);
+
+    *p = q;
+}
+
+void insert(int *p, int val) {
+    if (!(*p)) {
+        *p = newNode(val);
+        return;
+    }
+
+    if (tr[*p].val == val) {
+        tr[*p].cnt++;
+    }
+    else if (val < tr[*p].val) {
+        insert(&tr[*p].l, val);
+
+        if (tr[tr[*p].l].pri > tr[*p].pri)
+            zig(p);
+    }
+    else {
+        insert(&tr[*p].r, val);
+
+        if (tr[tr[*p].r].pri > tr[*p].pri)
+            zag(p);
+    }
+
+    pushup(*p);
+}
+
+void removeNode(int *p, int val) {
+    if (!(*p)) return;
+
+    if (tr[*p].val == val) {
+
+        if (tr[*p].cnt > 1) {
+            tr[*p].cnt--;
+        }
+        else if (!tr[*p].l || !tr[*p].r) {
+            *p = tr[*p].l + tr[*p].r;
+        }
+        else if (tr[tr[*p].l].pri > tr[tr[*p].r].pri) {
+            zig(p);
+            removeNode(&tr[*p].r, val);
+        }
+        else {
+            zag(p);
+            removeNode(&tr[*p].l, val);
+        }
+    }
+    else if (val < tr[*p].val) {
+        removeNode(&tr[*p].l, val);
+    }
+    else {
+        removeNode(&tr[*p].r, val);
+    }
+
+    if (*p) pushup(*p);
+}
+
+int getRank(int p, int val) {
+    if (!p) return 1;
+
+    if (val < tr[p].val)
+        return getRank(tr[p].l, val);
+
+    if (val > tr[p].val)
+        return tr[tr[p].l].siz +
+               tr[p].cnt +
+               getRank(tr[p].r, val);
+
+    return tr[tr[p].l].siz + 1;
+}
+
+int getKth(int p, int k) {
+    if (!p) return 0;
+
+    if (k <= tr[tr[p].l].siz)
+        return getKth(tr[p].l, k);
+
+    if (k <= tr[tr[p].l].siz + tr[p].cnt)
+        return tr[p].val;
+
+    return getKth(
+        tr[p].r,
+        k - tr[tr[p].l].siz - tr[p].cnt
+    );
+}
+
+int getPre(int p, int val) {
+    int ans = -2147483647;
+
+    while (p) {
+        if (tr[p].val < val) {
+            ans = tr[p].val;
+            p = tr[p].r;
+        }
+        else {
+            p = tr[p].l;
+        }
+    }
+
+    return ans;
+}
+
+int getSuc(int p, int val) {
+    int ans = 2147483647;
+
+    while (p) {
+        if (tr[p].val > val) {
+            ans = tr[p].val;
+            p = tr[p].l;
+        }
+        else {
+            p = tr[p].r;
+        }
+    }
+
+    return ans;
+}
+
+int main() {
+    srand(19260817);
+
+    int n;
+    scanf("%d", &n);
+
+    while (n--) {
+        int opt, x;
+        scanf("%d%d", &opt, &x);
+
+        if (opt == 1) {
+            insert(&root, x);
+        }
+        else if (opt == 2) {
+            removeNode(&root, x);
+        }
+        else if (opt == 3) {
+            printf("%d\n", getRank(root, x));
+        }
+        else if (opt == 4) {
+            printf("%d\n", getKth(root, x));
+        }
+        else if (opt == 5) {
+            printf("%d\n", getPre(root, x));
+        }
+        else if (opt == 6) {
+            printf("%d\n", getSuc(root, x));
+        }
+    }
+
+    return 0;
+}
 ```
 
 ---
@@ -242,8 +611,76 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result40.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct Node
+{
+    int val;
+    struct Node* next;
+}Node;
+#define hashsize 100003
+Node* hashtable[hashsize];
+
+int gethash(int x)
+{
+    return (x % hashsize + hashsize) % hashsize;
+}
+int contains(int x)
+{
+    int pos = gethash(x);
+    Node* p = hashtable[pos];
+    while (p)
+    {
+        if (p->val == x)return 1;
+        p = p->next;
+    }
+    return 0;
+}
+void insert(int x)
+{
+    int pos = gethash(x);
+    Node* p = (Node*)malloc(sizeof(Node));
+    p->val = x;
+    p->next = hashtable[pos];
+    hashtable[pos] = p;
+}
+void clearhash()
+{
+    for (int i = 0; i < hashsize; i++)
+    {
+        Node* p = hashtable[i];
+        while (p)
+        {
+            Node* tmp = p;
+            p = p->next;
+            free(tmp);
+        }
+        hashtable[i] = NULL;
+    }
+}
+int main()
+{
+    int T = 0;
+    scanf("%d", &T);
+    while (T--)
+    {
+        clearhash();
+        int n = 0;
+        scanf("%d", &n);
+        for (int i = 0; i < n; i++)
+        {
+            int num = 0;
+            scanf(" %d", &num);
+            if (!contains(num))
+            {
+                insert(num);
+                printf("%d ", num);
+            }
+        }
+        printf("\n");
+    }
+    return 0;
+}
 ```

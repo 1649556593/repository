@@ -64,10 +64,73 @@
 
 ## 代码实现
 
-![提交记录截图](result9.png)
-
 ```c
-Talk is weak，show your code plz.
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#define maxsize 10000
+int arr[maxsize] = { 0 };
+int front = 0;
+int rear = 0;
+void push(int x)
+{
+    arr[rear] = x;
+    rear++;
+}
+void pop()
+{
+    if (rear == front)
+        printf("ERR_CANNOT_POP\n");
+    else
+        front++;
+}
+void query()
+{
+    if (front == rear)
+    {
+        printf("ERR_CANNOT_QUERY\n");
+        return;
+    }
+    else
+    {
+        printf("%d\n",arr[front]);
+        return;
+    }
+}
+void size()
+{
+    printf("%d\n", rear-front);
+}
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    n;
+    while (n--)
+    {
+        int temp = 0;
+        scanf("%d",&temp);
+        if (temp == 1)
+        {
+            int x = 0;
+            scanf(" %d", &x);
+            push(x);
+        }
+        else if (temp == 2)
+        {
+            pop();
+        }
+        else if (temp == 3)
+        {
+            query();
+        }
+        else if (temp == 4)
+        {
+            size();
+        }
+    }
+    return 0;
+}
 ```
 
 ---
@@ -119,10 +182,40 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result10.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int main()
+{
+	int M, N;
+	int temp = 0;
+	scanf("%d %d", &M, &N);
+	int sum = 0;
+	int* arr = (int*)malloc(M * sizeof(int));
+	for (int i = 0; i < M; i++)
+	{
+		arr[i] = -1;
+	}
+	for (int i = 0; i < N; i++)
+	{
+		int flat = 0;
+		int num = 0;
+		scanf("%d", &num);
+		for (int j = 0; j < M; j++)
+		{
+			if (arr[j] == num)
+				flat = 1;
+		}
+		if (flat == 0)
+		{
+			sum++;
+			arr[temp % M] = num;
+			temp++;
+		}
+	}
+	printf("%d\n", sum);
+}
 ```
 
 ---
@@ -175,10 +268,65 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result11.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define max 100001
+typedef struct ship
+{
+	int time;
+	int num;
+	int* country;
+}ship;
+
+int main()
+{
+	int n = 0;
+	scanf("%d", &n);
+	ship* q = (ship*)malloc(n * sizeof(ship));
+	int* cnt = (int*)calloc(max, sizeof(int));
+	int ans = 0;
+	int head = 0;
+	for (int i = 0; i < n; i++)
+	{
+		int t, k;
+		scanf("%d %d", &t, &k);
+		q[i].time = t;
+		q[i].num = k;
+		q[i].country = (int*)malloc(k * sizeof(int));
+		for (int j = 0; j < k; j++)
+		{
+			scanf("%d", &q[i].country[j]);
+			int c = q[i].country[j];
+			if (cnt[c] == 0)
+			{
+				ans++;
+			}
+			cnt[c]++;
+		}
+		int mint = t - 86400;
+		while (head <= i && q[head].time <= mint)
+		{
+			for (int j = 0; j < q[head].num; j++)
+			{
+				int temp = q[head].country[j];
+				cnt[temp]--;
+				if (cnt[temp] == 0)
+					ans--;
+			}
+			head++;
+		}
+		printf("%d\n", ans);
+	}
+	for (int i = 0; i < n; i++)
+	{
+		free(q[i].country);
+	}
+	free(q);
+	free(cnt);
+	return 0;
+}
 ```
 
 ---
@@ -229,8 +377,89 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result12.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+
+// 比较函数改为long long，避免减法溢出
+int cmp_int(const void* e1, const void* e2) 
+{
+    long long* p1 = (long long*)e1;
+    long long* p2 = (long long*)e2;
+    if (*p1 < *p2) return -1;
+    if (*p1 > *p2) return 1;
+    return 0;
+}
+
+// pos改为long long数组，l和r改为long long指针
+void check(long long pos[], int* lowerbound, int* higherbound, long long* l, long long* r) 
+{
+    while (*lowerbound <= *higherbound && pos[*lowerbound] < *l)
+        (*lowerbound)++;
+    while (*lowerbound <= *higherbound && pos[*higherbound] > *r)
+        (*higherbound)--;
+}
+
+// pos改为long long数组，l和r改为long long指针，x改为long long
+void op1(long long pos[], int n, long long* l, long long* r, int* lowerbound, int* higherbound) 
+{
+    long long x = 0;
+    scanf("%lld", &x);
+    (*l) -= x;
+    (*r) -= x;
+    check(pos, lowerbound, higherbound, l, r);
+}
+
+// 同op1的类型修改
+void op2(long long pos[], int n, long long* l, long long* r, int* lowerbound, int* higherbound) 
+{
+    long long x = 0;
+    scanf("%lld", &x);
+    (*l) += x;
+    (*r) += x;
+    check(pos, lowerbound, higherbound, l, r);
+}
+
+void op3(int lowerbound, int higherbound) 
+{
+    if (lowerbound > higherbound)
+        printf("0\n");
+    else
+        printf("%d\n", higherbound - lowerbound + 1);
+}
+
+int main() 
+{
+    int n, m, k;
+    scanf("%d %d %d", &n, &m, &k);
+    // pos数组改为long long
+    long long* pos = (long long*)malloc(n * sizeof(long long));
+    // l和r改为long long
+    long long l = -k;
+    long long r = k;
+    int lowerbound = 0;
+    int higherbound = n - 1;
+    // 输入用%lld
+    for (int i = 0; i < n; i++)
+        scanf("%lld", &pos[i]);
+    qsort(pos, n, sizeof(long long), cmp_int);
+    check(pos, &lowerbound, &higherbound, &l, &r);
+    for (int i = 0; i < m; i++) {
+        int temp = 0;
+        scanf("%d", &temp);
+        switch (temp) {
+        case 1:
+            op1(pos, n, &l, &r, &lowerbound, &higherbound);
+            break;
+        case 2:
+            op2(pos, n, &l, &r, &lowerbound, &higherbound);
+            break;
+        case 3:
+            op3(lowerbound, higherbound);
+            break;
+        }
+    }
+    free(pos);
+    return 0;
+}
 ```

@@ -66,10 +66,68 @@
 
 ## 代码实现
 
-![提交记录截图](result25.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<limits.h>
+#define MAXN 205
+int cost[MAXN][MAXN];
+int dist[MAXN];
+int visited[MAXN];
+
+int main()
+{
+	int n;
+	scanf("%d", &n);
+    for (int i = 1; i <= n; i++) 
+    {
+        for (int j = 1; j <= n; j++) 
+        {
+            cost[i][j] = INT_MAX;
+        }
+    }
+    for (int i = 1; i <= n-1; i++)
+    {
+        for (int j = i + 1; j <= n; j++)
+        {
+            scanf("%d", &cost[i][j]);
+        }
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        dist[i] = cost[1][i];
+    }
+    dist[1] = 0;
+    visited[1] = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        int u = -1;
+        int min_d = INT_MAX;
+        for (int j = 1; j <= n; j++)
+        {
+            if (!visited[j] && dist[j] < min_d)
+            {
+                min_d = dist[j];
+                u = j;
+            }
+        }
+        if (u == -1)break;
+        visited[u] = 1;
+        for (int v = u + 1; v <= n; v++)
+        {
+            if (!visited[v] && cost[u][v] != INT_MAX)
+            {
+                if (dist[u] + cost[u][v] < dist[v]) 
+                {
+                    dist[v] = dist[u] + cost[u][v];
+                }
+            }
+        }
+    }
+    printf("%d\n", dist[n]);
+    return  0;
+}
 ```
 
 ---
@@ -125,10 +183,125 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result26.png)
-
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAXN 100005
+#define MAXM 1000005
+
+typedef struct Edge 
+{
+    int u, v;
+} Edge;
+
+Edge edges[MAXM];
+int *adj[MAXN];
+int degree[MAXN];
+int visited[MAXN];
+int n, m;
+
+int cmp(const void *a, const void *b) 
+{
+    return *(int *)a - *(int *)b;
+}
+
+void dfs(int u) 
+{
+    visited[u] = 1;
+    printf("%d ", u);
+    for (int i = 0; i < degree[u]; i++) 
+    {
+        int v = adj[u][i];
+        if (!visited[v]) 
+        {
+            dfs(v);
+        }
+    }
+}
+
+void bfs(int start)
+{
+    memset(visited, 0, sizeof(visited));
+    int *queue = (int *)malloc((n + 1) * sizeof(int));
+    int front = 0, rear = 0;
+    queue[rear++] = start;
+    visited[start] = 1;
+    printf("%d ", start);
+    while (front < rear) 
+    {
+        int u = queue[front++];
+        for (int i = 0; i < degree[u]; i++) 
+        {
+            int v = adj[u][i];
+            if (!visited[v]) 
+            {
+                visited[v] = 1;
+                printf("%d ", v);
+                queue[rear++] = v;
+            }
+        }
+    }
+    free(queue);
+}
+
+int main() 
+{
+    scanf("%d %d", &n, &m);
+
+    for (int i = 0; i < m; i++) 
+    {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        edges[i].u = u;
+        edges[i].v = v;
+        degree[u]++;
+    }
+
+    for (int i = 1; i <= n; i++) 
+    {
+        if (degree[i] > 0) 
+        {
+            adj[i] = (int *)malloc(degree[i] * sizeof(int));
+        } else 
+        {
+            adj[i] = NULL;
+        }
+    }
+
+    memset(degree, 0, sizeof(degree));
+    for (int i = 0; i < m; i++) 
+    {
+        int u = edges[i].u;
+        int v = edges[i].v;
+        adj[u][degree[u]++] = v;
+    }
+
+    for (int i = 1; i <= n; i++) 
+    {
+        if (degree[i] > 0) 
+        {
+            qsort(adj[i], degree[i], sizeof(int), cmp);
+        }
+    }
+
+    memset(visited, 0, sizeof(visited));
+    dfs(1);
+    printf("\n");
+
+    bfs(1);
+    printf("\n");
+    for (int i = 1; i <= n; i++) 
+    {
+        if (adj[i] != NULL) 
+        {
+            free(adj[i]);
+        }
+    }
+    return 0;
+}
+
 ```
 
 ---
@@ -182,10 +355,67 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result27.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+#include<limits.h>
+typedef struct Edge 
+{
+	int to;
+	int weight;
+	struct Edge* next;
+}Edge;
+Edge* adj[1505];
+long long dist[1505];
+const long long INF = 1e18;
+void addEdge(int u, int v, int w)
+{
+	Edge* e = (Edge*)malloc(sizeof(Edge));
+	e->to = v;
+	e->weight = w;
+	e->next = adj[u];
+	adj[u] = e;
+}
+int main()
+{
+	int n, m;
+	scanf("%d %d", &n, &m);
+	for (int i = 0; i < m; i++)
+	{
+		int u, v, w;
+		scanf("%d %d %d", &u, &v, &w);
+		addEdge(u, v, w);
+	}
+	for (int i = 1; i <= n; i++)
+	{
+		dist[i] = -INF;
+	}
+	dist[1] = 0;
+	for (int u = 1; u <= n; u++)
+	{
+		if (dist[u] == -INF)continue;
+
+		for (Edge* e = adj[u]; e != NULL; e = e->next)
+		{
+			int v = e->to;
+			int w = e->weight;
+			if (dist[v] < dist[u] + w)
+			{
+				dist[v] = dist[u] + w;
+			}
+		}
+	}
+	if (dist[n] == -INF)
+	{
+		printf("-1\n");
+	}
+	else
+	{
+		printf("%lld\n", dist[n]);
+	}
+	return 0;
+}
+
 ```
 
 ---
@@ -236,8 +466,85 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result28.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define MAXN 100001
+typedef struct AdjNode
+{
+	int v;
+	struct AdjNode* next;
+}AdjNode;
+AdjNode* adj[MAXN];
+int depth[MAXN];
+int visited[MAXN];
+
+int main()
+{
+	int n, d;
+	scanf("%d %d", &n, &d);
+	for (int i = 1; i <= n ; i++)
+	{
+		adj[i] = NULL;
+		visited[i] = 0;
+		depth[i] = 0;
+	}
+	for (int i = 0; i < n - 1; i++)
+	{
+		int u, v;
+		scanf("%d %d", &u, &v);
+		AdjNode* node1 = (AdjNode*)malloc(sizeof(AdjNode));
+		node1->v = v;
+		node1->next = adj[u];
+		adj[u] = node1;
+
+		AdjNode* node2 = (AdjNode*)malloc(sizeof(AdjNode));
+		node2->v = u;
+		node2->next = adj[v];
+		adj[v] = node2;
+	}
+
+	int* queue = (int*)malloc((n + 1) * sizeof(int));
+	int front = 0;
+	int rear = 0;
+	queue[rear++] = 1;
+	visited[1] = 1;
+	depth[1] = 0;
+	while (front < rear)
+	{
+		int u = queue[front++];
+		AdjNode* p = adj[u];
+		while (p != NULL)
+		{
+			int v = p->v;
+			if (!visited[v])
+			{
+				visited[v] = 1;
+				depth[v] = depth[u] + 1;
+				queue[rear++] = v;
+			}
+			p = p->next;
+		}
+	}
+	int cnt = 0;
+	for (int i = 2; i <= n; i++)
+	{
+		if (depth[i] <= d)
+			cnt++;
+	}
+	printf("%d\n", cnt);
+	free(queue);
+	for (int i = 1; i <= n; i++)
+	{
+		AdjNode* p = adj[i];
+		while (p != NULL) 
+		{
+			AdjNode* tmp = p;
+			p = p->next;
+			free(tmp);
+		}
+	}
+	return 0;
+}
 ```

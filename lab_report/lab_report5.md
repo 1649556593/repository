@@ -72,10 +72,79 @@
 
 ## 代码实现
 
-![提交记录截图](result17.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define MAXN 1000005
+void buildNext(char* pattern, int* next, int len)
+{
+	next[0] = 0;
+	int prefix_len = 0;
+	int i = 1;
+	while (i < len)
+	{
+		if (pattern[prefix_len] == pattern[i])
+		{
+			prefix_len++;
+			next[i] = prefix_len;
+			i++;
+		}
+		else
+		{
+			if (prefix_len == 0)
+			{
+				next[i] = 0;
+				i++;
+			}
+			else
+			{
+				prefix_len = next[prefix_len - 1];
+			}
+		}
+	}
+}
+void KMP_Search(char* text, char* pattern, int* next, int m)
+{
+	int n = strlen(text);
+	int i = 0;
+	int j = 0;
+	while (i < n)
+	{
+		if (text[i] == pattern[j])
+		{
+			i++;
+			j++;
+		}
+		else
+		{
+			if (j > 0)
+				j = next[j - 1];
+			else
+				i++;
+		}
+		if (j == m)
+		{
+			printf("%d\n", i - j + 1);
+			j = next[j - 1];
+		}
+	}
+}
+char s1[MAXN], s2[MAXN];
+int main()
+{
+	scanf("%s%s", s1, s2);
+	int n = strlen(s1);
+	int m = strlen(s2);
+	int* next = (int*)calloc(m, sizeof(int));
+	buildNext(s2, next,m);
+	KMP_Search(s1, s2, next, m);
+	for (int i = 0; i < m; i++)
+		printf("%d ", next[i]);
+	printf("\n");
+	free(next);
+	return 0;
+}
 ```
 
 ---
@@ -132,10 +201,92 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result18.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define max 100010
+void op1(char str[])
+{
+	char temp1[max] = { 0 };
+	scanf("%s", temp1);
+	strcat(str, temp1);
+	printf("%s\n", str);
+}
+void op2(char str[])
+{
+	int k = 0;
+	int m = 0;
+	scanf(" %d %d", &k, &m);
+	for (int i = k; i < k + m; i++)
+	{
+		str[i - k] = str[i];
+	}
+	str[m] = '\0';
+	printf("%s\n",str);
+}
+void op3(char str[])
+{
+	int k = 0;
+	scanf("%d", &k);
+	char temp[max] = { 0 };
+	scanf("%s", temp);
+	int sz1 = strlen(str);
+	int sz2 = strlen(temp);
+	for (int i = sz1; i >= k; i--)
+	{
+		str[i + sz2] = str[i];
+	}
+	int num = 0;
+	for (int i = k; i < k + sz2; i++)
+	{
+		str[i] = temp[num++];
+	}
+	printf("%s\n", str);
+}
+void op4(char str[])
+{
+	char temp[max] = { 0 };
+	scanf("%s", temp);
+	char* dest = strstr(str, temp);
+	if (dest == NULL)
+	{
+		printf("-1\n");
+	}
+	else
+	{
+		printf("%d\n", dest - str);
+	}
+
+}
+int main()
+{
+	int q = 0;
+	scanf("%d", &q);
+	char str[max] = { 0 };
+	scanf("%s", str);
+	while (q--)
+	{
+		int n = 0;
+		scanf("%d", &n);
+		switch(n)
+		{
+			case 1:
+				op1(str);
+				break;
+			case 2:
+				op2(str);
+				break;
+			case 3:
+				op3(str);
+				break;
+			case 4:
+				op4(str);
+				break;
+		}
+	}
+	return 0;
+}
 ```
 
 ---
@@ -181,10 +332,30 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result19.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include <stdlib.h>
+int main()
+{
+    int n,m;
+    scanf("%d %d",&n,&m);
+    int arr[100][100];
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+            scanf("%d",&arr[i][j]);
+        }
+    }
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            printf("%d ",arr[j][i]);
+        }
+        printf("\n");
+    }
+}
 ```
 
 ---
@@ -234,8 +405,89 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result20.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define max 100010
+int main()
+{
+	int N = 0;
+	scanf("%d", &N);
+	int** arr = (int**)malloc(N * sizeof(int*));
+	for (int i = 0; i < N; i++)
+	{
+		arr[i] = (int*)malloc(N * sizeof(int));
+	}
+
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			arr[i][j] = 0;
+		}
+	}
+
+	arr[0][N / 2] = 1;
+	int num = 2;
+	int temp1 = 0;
+	int temp2 = N/2;
+	while (num <= N * N)
+	{
+		if (temp1 == 0 && temp2 != N - 1)
+		{
+			arr[N - 1][temp2 + 1]=num;
+			temp1 = N - 1;
+			temp2 = temp2 + 1;
+			num++;
+		}
+		else if (temp1 != 0 && temp2 == N - 1)
+		{
+			arr[temp1 - 1][0] = num;
+			temp1 = temp1 - 1;
+			temp2 = 0;
+			num++;
+		}
+		else if (temp1 == 0 && temp2 == N - 1)
+		{
+			arr[temp1 + 1][temp2] = num;
+			temp1 = temp1 + 1;
+			temp2 = temp2;
+			num++;
+		}
+		else if (temp1 != 0 && temp2 != N - 1)
+		{
+			if (arr[temp1 - 1][temp2 + 1] == 0)
+			{
+				arr[temp1 - 1][temp2 + 1] = num;
+				temp1 = temp1 - 1;
+				temp2 = temp2 + 1;
+				num++;
+			}
+			else
+			{
+				arr[temp1 + 1][temp2] = num;
+				temp1 = temp1 + 1;
+				temp2 = temp2;
+				num++;
+			}
+		}
+	}
+
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			printf("%d ", arr[i][j]);
+		}
+		printf("\n");
+	}
+
+	for (int i = 0; i < N; i++)
+	{
+		free(arr[i]);
+	}
+	free(arr);
+	return 0;
+}
 ```

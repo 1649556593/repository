@@ -60,10 +60,75 @@
 
 ## 代码实现
 
-![提交记录截图](result21.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int main()
+{
+	int arr[26] = { 0 };
+	int n = 4;
+	while (n--)
+	{
+		char s[100] = {0};
+		fgets(s, sizeof(s), stdin);
+		int sz = strlen(s);
+		for (int i = 0; i < sz; i++)
+		{
+			int temp = s[i] - 'A';
+			if (temp >= 0 && temp < 26)
+			{
+				arr[temp]++;
+			}
+		}
+	}
+	int max = 0;
+	for (int i = 0; i < 26; i++)
+	{
+		if (arr[i] > max)
+		{
+			max = arr[i];
+		}
+	}
+	char** print = (char**)malloc((max+1) * sizeof(char*));
+	for (int i = 0; i <= max; i++)
+	{
+		print[i] = (char*)malloc(26 * sizeof(char));
+	}
+	for (int i = 0; i < 26; i++)
+	{
+		print[max][i] = i + 'A';
+	}
+
+	for (int i = 0; i < max; i++)
+	{
+		for (int j = 0; j < 26; j++)
+		{
+			if (arr[j] >= max - i)
+			{
+				print[i][j] = '*';
+			}
+			else
+			{
+				print[i][j] = ' ';
+			}
+		}
+	}
+	for (int i = 0; i <= max; i++)
+	{
+		for (int j = 0; j < 26; j++)
+		{
+			printf("%c ", print[i][j]);
+		}
+		printf("\n");
+	}
+	for (int i = 0; i <= max; i++)
+	{
+		free(print[i]);
+	}
+	free(print);
+
+}
 ```
 
 ---
@@ -120,10 +185,68 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result22.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+
+int main()
+{
+    int N, temp1, temp2;
+    scanf("%d %d", &N, &temp1);
+    scanf("%d", &temp2);
+    int target_x = temp1 - 1;
+    int target_y = temp2 - 1;
+
+    int left = 0, right = N - 1;
+    int up = 0, down = N - 1;
+    int num = 1;
+
+    while (left <= right) 
+    {
+        for (int y = left; y <= right; y++) 
+        {
+            if (up == target_x && y == target_y) 
+            {
+                printf("%d\n", num);
+                return 0;
+            }
+            num++;
+        }
+        up++;
+        for (int x = up; x <= down; x++) 
+        {
+            if (x == target_x && right == target_y) 
+            {
+                printf("%d\n", num);
+                return 0;
+            }
+            num++;
+        }
+        right--; 
+
+       
+        for (int y = right; y >= left; y--) {
+            if (down == target_x && y == target_y) {
+                printf("%d\n", num);
+                return 0;
+            }
+            num++;
+        }
+        down--;
+
+        
+        for (int x = down; x >= up; x--) {
+            if (x == target_x && left == target_y) {
+                printf("%d\n", num);
+                return 0;
+            }
+            num++;
+        }
+        left++;
+    }
+
+    return 0;
+}
+
 ```
 
 ---
@@ -176,10 +299,72 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result23.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int main()
+{
+	int n = 0;
+	int num = 1;
+	int pos = 0;
+	int pos2 = 0;
+	scanf("%d", &n);
+	if (n == 1)
+	{
+		int temp1 = 0;
+		int temp2 = 0;
+		scanf("%d %d", &temp1, &temp2);
+		printf("%d\n", temp1 < temp2 ? 1 : 2);
+		return 0;
+	}
+	for (int i = 0; i < n; i++)
+	{
+		num *= 2;
+	}
+	int* arr = (int*)malloc((num + 1) * sizeof(int));
+	int* arr2 = (int*)malloc((num + 1) * sizeof(int));
+	for (int i = 0; i < num; i += 2)
+	{
+		int temp1;
+		int temp2;
+		scanf("%d %d", &temp1, &temp2);
+		arr2[pos2++] = temp1;
+		arr2[pos2++] = temp2;
+		if (temp1 > temp2)
+			arr[pos++] = temp1;
+		else
+			arr[pos++] = temp2;
+	}
+	for (int i = 0; i < n - 2; i++)
+	{
+		int countrynum = pos;
+		pos = 0;
+		for (int j = 0; j < countrynum; j += 2)
+		{
+			int temp1 = arr[j];
+			int temp2 = arr[j + 1];
+			if (temp1 > temp2)
+				arr[pos++] = temp1;
+			else
+				arr[pos++] = temp2;
+		}
+	}
+	int temp1 = arr[0];
+	int temp2 = arr[1];
+	int result = temp1 < temp2 ? temp1 : temp2;
+	for (int i = 0; i < num; i++)
+	{
+		if (arr2[i] == result)
+		{
+			printf("%d\n", i + 1);
+			break;
+		}
+	}
+	free(arr);
+	free(arr2);
+	return 0;
+}
 ```
 
 ---
@@ -232,8 +417,47 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result24.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int main()
+{
+	int n = 0;
+	scanf("%d", &n);
+	int* left = (int*)calloc((n+1) , sizeof(int));
+	int* right = (int*)calloc((n+1) , sizeof(int));
+	for (int i = 1; i <= n; i++)
+	{
+		scanf("%d %d", &left[i], &right[i]);
+	}
+	int* queue = (int*)malloc((n+1) * sizeof(int));
+	queue[0] = 1;
+	int front = 0;
+	int rear = 1;
+	int depth = 0;
+	while (front < rear)
+	{
+		depth++;
+		int size = rear - front;
+		for (int i = 0; i < size; i++)
+		{
+			int temp = queue[front];
+			if (left[temp] != 0)
+			{
+				queue[rear++] = left[temp];
+			}
+			if (right[temp] != 0)
+			{
+				queue[rear++] = right[temp];
+			}
+			front++;
+		}
+	}
+	free(left);
+	free(right);
+	free(queue);
+	printf("%d\n", depth);
+	return 0;
+}
 ```

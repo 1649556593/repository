@@ -63,10 +63,22 @@
 
 ## 代码实现
 
-![提交记录截图](result13.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+    char s[60]={0};
+    int n=0;
+    scanf("%d",&n);
+    scanf(" %s",s);
+    int sz=strlen(s);
+    for(int i=0;i<sz;i++)
+    {
+        int m=(s[i]-'a'+n)%26;
+        printf("%c",m+'a');
+    }
+}
 ```
 
 ---
@@ -118,10 +130,28 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result14.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    char s[1001]={0};
+    scanf("%s",s);
+    int sz=strlen(s);
+    for(int i=0;i<sz;i++)
+    {
+        if((s[i]-'0')==0)
+            continue;
+        
+        if(i==0)
+            printf("%d*%d^%d",s[i]-'0',n,sz-i-1);
+        else
+            printf("+%d*%d^%d",s[i]-'0',n,sz-i-1);
+    }
+    
+}
 ```
 
 ---
@@ -176,10 +206,107 @@ IPv6 地址固定只有 $8$ 组，因此完全可以先把它拆成 $8$ 段后�
 
 ## 代码实现
 
-![提交记录截图](result15.png)
-
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <string.h>
+
+int main() 
+{
+    char input[50];
+    char groups[8][5]; 
+    int is_zero[8] = {0};
+    
+    fgets(input, sizeof(input), stdin);
+    int group_idx = 0;
+    char *token = strtok(input, ":");
+    while (token != NULL && group_idx < 8) 
+    {
+        int start = 0;
+        while (start < 4 && token[start] == '0') 
+        {
+            start++;
+        }
+        
+        if (start == 4) 
+        {
+          
+            groups[group_idx][0] = '0';
+            groups[group_idx][1] = '\0';
+            is_zero[group_idx] = 1;
+        } 
+        else 
+        {
+           
+            int j = 0;
+            while (start < 4) 
+            {
+                groups[group_idx][j++] = token[start++];
+            }
+            groups[group_idx][j] = '\0';
+            is_zero[group_idx] = 0;
+        }
+        group_idx++;
+        token = strtok(NULL, ":");
+    }
+
+   
+    int max_len = 0;
+    int current_len = 0;
+    int start_pos = -1; 
+
+    for (int i = 0; i < 8; i++) 
+    {
+        if (is_zero[i]) 
+        {
+            current_len++;
+            if (current_len > max_len) 
+            {
+                max_len = current_len;
+                start_pos = i - current_len + 1;
+            }
+        } else 
+        {
+            current_len = 0;
+        }
+    }
+
+   
+    int output_first = 1;
+    if (max_len >= 1) 
+    {
+       
+        for (int i = 0; i < start_pos; i++) 
+        {
+            if (!output_first) printf(":");
+            printf("%s", groups[i]);
+            output_first = 0;
+        }
+        
+        printf("::");
+        output_first = 1; 
+        
+        for (int i = start_pos + max_len; i < 8; i++) 
+        {
+            if (!output_first) printf(":");
+            printf("%s", groups[i]);
+            output_first = 0;
+        }
+    } 
+    else 
+    {
+       
+        for (int i = 0; i < 8; i++) 
+        {
+            if (!output_first) printf(":");
+            printf("%s", groups[i]);
+            output_first = 0;
+        }
+    }
+    printf("\n");
+
+    return 0;
+}
+
 ```
 
 ---
@@ -232,8 +359,85 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result16.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define max 1000000
+int judge(char dest1[], char temp[])
+{
+	int sz1 = strlen(dest1);
+	int sz2 = strlen(temp);
+	if (sz1 != sz2)
+	{
+		return 0;
+	}
+	for (int i = 0; i < sz1; i++)
+	{
+		int num1 = dest1[i] - 'a';
+		int num2 = dest1[i] - 'A';
+		int num3 = temp[i] - 'a';
+		int num4 = temp[i] - 'A';
+		if (num1 != num3 && num1 != num4&&num2!=num3&&num2!=num4)
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
+int main()
+{
+	char dest1[10] = { 0 };
+	scanf("%s", dest1);
+	char str[max] = { 0 };
+	getchar();
+	fgets(str,sizeof(str),stdin);
+	int sz = strlen(str);
+	char temp[10] = {0};
+	int k = 0;
+	int first = 0;
+	int num = 0;
+	int sum = 0;
+	int flat = 0;
+	for (int i = 0; i < sz; i++)
+	{
+		if (str[i] != ' ')
+		{
+			temp[k++] = str[i];
+		}
+		else
+		{
+			temp[k] = '\0';
+			if (judge(dest1, temp))
+			{
+				flat = 1;
+				if (sum == 0)
+				{
+					first = num;
+				}
+				sum++;
+			}
+			k = 0;
+			num = i + 1;
+		}
+	}
+	temp[k] = '\0';
+	if (judge(dest1, temp))
+	{
+		flat = 1;
+		if (sum == 0)
+		{
+			first = num;
+		}
+		sum++;
+	}
+	if (flat == 0)
+	{
+		printf("-1\n");
+	}
+	else
+	{
+		printf("%d %d\n", sum, first);
+	}
+}
 ```

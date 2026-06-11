@@ -69,10 +69,98 @@
 
 ## 代码实现
 
-![提交记录截图](result5.png)
+
 
 ```c
-Talk is weak，show your code plz.
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+#define maxsize 100
+typedef struct
+{
+    int* data;
+    int top;
+}stack;
+stack* initstack()
+{
+    stack* a = (stack*)malloc(sizeof(stack));
+    a->data = (int*)malloc(maxsize * sizeof(int));
+    a->top = -1;
+    return a;
+}
+void push(int num, stack* s)
+{
+    s->top++;
+    s->data[s->top] = num;
+}
+void pop(int* num, stack* s)
+{
+    *num = s->data[s->top];
+    s->top--;
+}
+int calculate(int a, int b, char c)
+{
+    switch(c)
+    {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '*':
+            return a * b;
+        case '/':
+            return a / b;
+        default:
+            return 0;
+    }
+}
+int main()
+{
+    stack* s = initstack();
+    char str[100] = { 0 };
+    scanf("%s", str);
+    int idx = 0;
+    int start = 0;
+    int end = 0;
+    while (str[idx] != '@')
+    {
+        char temp[10] = { 0 };
+        while (str[idx] != '.'&&str[idx]!='@')
+        {
+            if (isdigit(str[idx]))
+            {
+                end++;
+                idx++;
+            }
+            else
+            {
+                int a, b;
+                pop(&b, s);
+                pop(&a, s);
+                int result = calculate(a, b, str[idx]);
+                push(result, s);
+                start = idx + 1;
+                end = idx + 1;
+                idx++;
+            }
+        }
+        strncpy(temp, str + start, end - start);
+        int num = atoi(temp);
+        push(num, s);
+        start = idx + 1;
+        end = start;
+        if(str[idx]!='@')
+        idx++;
+    }
+    int endresult = 0;
+    pop(&endresult, s);
+    pop(&endresult, s);
+    printf("%d", endresult);
+    free(s->data);
+    free(s);
+}
 ```
 
 ---
@@ -125,10 +213,36 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result6.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#define maxsize 260
+#include<string.h>
+int main()
+{
+    char l[maxsize]={0};
+    int lnum=0;
+    int rnum=0;
+    int balance=0;
+    scanf("%s",l);
+    int length=strlen(l);
+    for(int i=0;i<length;i++)
+    {
+        if(l[i]=='(')
+        {
+            balance++;
+        }
+        if(l[i]==')')
+             balance--;
+        if(balance<0)
+        {
+            break;
+        }
+    }
+    if(balance!=0)
+        printf("NO\n");
+    else
+        printf("YES\n");
+}
 ```
 
 ---
@@ -181,12 +295,51 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result7.png)
-
 ```c
-Talk is weak，show your code plz.
-```
+#include <stdio.h>
+#include <string.h>
 
+#define MAXN 1005  
+
+int main() {
+    char s[MAXN];       
+    char res[MAXN * 2]; 
+    int idx = 0;        
+    int cnt = 0;        
+
+    scanf("%s", s);
+    int len = strlen(s);
+
+    for (int i = 0; i < len; i++) 
+    {
+        if (s[i] == '(') 
+        {
+            res[idx++] = '(';
+            cnt++;
+        }
+        else 
+        {
+            if (cnt > 0) 
+            {
+                res[idx++] = ')';
+                cnt--;
+            }
+            else 
+            {
+                res[idx++] = '(';
+                res[idx++] = ')';
+            }
+        }
+    }
+    while (cnt > 0) {
+        res[idx++] = ')';
+        cnt--;
+    }
+    res[idx] = '\0';
+    printf("%s\n", res);
+    return 0;
+}
+```
 ---
 
 # （四）P2201 数列编辑器
@@ -247,8 +400,86 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result8.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<limits.h>
+#define max 1000010
+int left[max];
+int right[max];
+long long sum[max];
+int max_sum[max];
+int l_top = 0;
+int r_top = 0;
+
+int main()
+{
+    int n = 0;
+    scanf("%d", &n);
+    max_sum[0] = INT_MIN;
+
+    while (n--)
+    {
+        char temp;
+        scanf(" %c", &temp);
+
+        if (temp == 'I')
+        {
+            int num = 0;
+            scanf("%d", &num);
+            left[++l_top] = num;
+            sum[l_top] = sum[l_top - 1] + num;
+            if (sum[l_top] > max_sum[l_top - 1])
+            {
+                max_sum[l_top] = sum[l_top];
+            }
+            else
+            {
+                max_sum[l_top] = max_sum[l_top - 1];
+            }
+        }
+        else if (temp == 'D')
+        {
+            if (l_top > 0)
+            {
+                l_top--;
+            }
+        }
+        else if (temp == 'L')
+        {
+            // 从 left 弹出，压入 right
+            if (l_top > 0)
+            {
+                right[++r_top] = left[l_top--];
+            }
+        }
+        else if (temp == 'R')
+        {
+            // 从 right 弹出，压入 left
+            if (r_top > 0)
+            {
+                int num = right[r_top--];
+                left[++l_top] = num;
+                // 重新计算 sum 和 max_sum（因为压入了新元素）
+                sum[l_top] = sum[l_top - 1] + num;
+                if (sum[l_top] > max_sum[l_top - 1])
+                {
+                    max_sum[l_top] = sum[l_top];
+                }
+                else
+                {
+                    max_sum[l_top] = max_sum[l_top - 1];
+                }
+            }
+        }
+        else if (temp == 'Q')
+        {
+            int k = 0;
+            scanf("%d", &k);
+            printf("%d\n", max_sum[k]);
+        }
+    }
+
+	return 0;
+}
 ```

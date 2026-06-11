@@ -68,10 +68,33 @@
 
 ## 代码实现
 
-![提交记录截图](result29.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int getPreOrder(char* in, char* post, int len)
+{
+	if (len <= 0)
+		return 0;
+	char root = post[len - 1];
+	int pos = 0;
+	while (in[pos] != root)
+	{
+		pos++;
+	}
+	printf("%c", root);
+	getPreOrder(in, post, pos);
+	getPreOrder(in + pos + 1, post + pos, len - pos - 1);
+}
+int main()
+{
+	char in[10], post[10];
+	scanf("%s%s", in, post);
+	int n = strlen(in);
+	getPreOrder(in, post, n);
+	printf("\n");
+	return 0;
+}
 ```
 
 ---
@@ -123,10 +146,56 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result30.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+typedef struct TreeNode
+{
+	char val;
+	int left;
+	int	right;
+}TreeNode;
+TreeNode tree[27];
+void PreOrder(int root)
+{
+	if (root==-1)
+	{
+		return;
+	}
+	printf("%c", tree[root].val);
+	PreOrder(tree[root].left);
+	PreOrder(tree[root].right);
+}
+int main()
+{
+	int n = 0;
+	scanf("%d", &n);
+	for (int i = 0; i < 26; i++)
+	{
+		tree[i].val = '*';
+		tree[i].left = -1;
+		tree[i].right = -1;
+	}
+	char node, lc, rc;
+	scanf(" %c %c %c", &node, &lc, &rc);
+	int rootIdx = node - 'a';
+	tree[rootIdx].val = node;
+	if (lc != '*') tree[rootIdx].left = lc - 'a';
+	if (rc != '*') tree[rootIdx].right = rc - 'a';
+	for (int i = 1; i < n; i++)
+	{
+		char node, lc, rc;
+		scanf(" %c %c %c", &node, &lc, &rc);
+		int Idx = node - 'a';
+		tree[Idx].val = node;
+		if (lc != '*') tree[Idx].left = lc - 'a';
+		if (rc != '*') tree[Idx].right = rc - 'a';
+	}
+	PreOrder(rootIdx);
+	printf("\n");
+	return 0;
+}
 ```
 
 ---
@@ -179,10 +248,44 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result31.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+int count = 0;
+void find(char* pre, char* post,int pre_len)
+{
+	if (pre_len <= 1)
+		return;
+	char pre_root = pre[1];
+	char post_root = post[pre_len - 2];
+	if (pre_root == post_root)
+	{
+		count++;
+		find(pre + 1, post, pre_len - 1);
+	}
+	else
+	{
+		int left_len = 0;
+		while (post[left_len] != pre_root)
+		{
+			left_len++;
+		}
+		left_len++;
+		find(pre + 1, post, left_len);
+		find(pre + 1 + left_len, post + left_len, pre_len - 1 - left_len);
+	}
+}
+int main()
+{
+	char s1[30];
+	char s2[30];
+	scanf("%s%s", s1, s2);
+	int len = strlen(s1);
+	count = 0;
+	find(s1, s2, len);
+	long long ans = 1LL << count;
+	printf("%lld\n", ans);
+}
 ```
 
 ---
@@ -232,8 +335,33 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
-![提交记录截图](result32.png)
-
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int cmp(const void* e1, const void* e2)
+{
+	int* p1 = (int*)e1;
+	int* p2 = (int*)e2;
+	return (*p1) - (*p2);
+}
+int main()
+{
+	int n = 0;
+	int m = 0;
+	scanf("%d %d", &n, &m);
+	int* arr = (int*)malloc(m * sizeof(int));
+	for (int i = 0; i < m; i++)
+	{
+		int temp = 0;
+		scanf(" %d", &temp);
+		arr[i]=temp;
+	}
+	qsort(arr, m, sizeof(int), cmp);
+	for (int i = 0; i < m; i++)
+	{
+		printf("%d ", arr[i]);
+	}
+	free(arr);
+}
 ```
