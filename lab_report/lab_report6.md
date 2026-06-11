@@ -60,6 +60,8 @@
 
 ## 代码实现
 
+![提交记录截图](result21.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -118,6 +120,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result22.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -172,6 +176,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result23.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -225,6 +231,8 @@ Talk is weak，show your code plz.
 在 $10^6$ 级别数据下，线性遍历是合理且必要的做法。
 
 ## 代码实现
+
+![提交记录截图](result24.png)
 
 ```c
 Talk is weak，show your code plz.

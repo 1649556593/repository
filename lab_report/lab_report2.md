@@ -69,6 +69,8 @@
 
 ## 代码实现
 
+![提交记录截图](result5.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -123,6 +125,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result6.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -176,6 +180,8 @@ Talk is weak，show your code plz.
 数据范围只有 $10^3$，该做法非常稳妥。
 
 ## 代码实现
+
+![提交记录截图](result7.png)
 
 ```c
 Talk is weak，show your code plz.
@@ -240,6 +246,8 @@ Talk is weak，show your code plz.
 面对 $10^6$ 级别的操作数，这样的线性复杂度才有可能通过本题。
 
 ## 代码实现
+
+![提交记录截图](result8.png)
 
 ```c
 Talk is weak，show your code plz.

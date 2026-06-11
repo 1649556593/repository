@@ -58,6 +58,8 @@
 
 ## 代码实现
 
+![提交记录截图](result37.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -116,6 +118,8 @@ Talk is weak，show your code plz.
 在本题给定的数据范围下，这样的实现通常可以接受。
 
 ## 代码实现
+
+![提交记录截图](result38.png)
 
 ```c
 Talk is weak，show your code plz.
@@ -177,6 +181,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result39.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -235,6 +241,8 @@ Talk is weak，show your code plz.
 在多组数据和较大值域下，哈希是比数组开桶更稳妥的选择。
 
 ## 代码实现
+
+![提交记录截图](result40.png)
 
 ```c
 Talk is weak，show your code plz.

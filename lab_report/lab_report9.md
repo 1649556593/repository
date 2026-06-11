@@ -64,6 +64,8 @@
 
 ## 代码实现
 
+![提交记录截图](result33.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -109,6 +111,8 @@ Talk is weak，show your code plz.
 在题目给定范围下，这类复杂度完全足够。
 
 ## 代码实现
+
+![提交记录截图](result34.png)
 
 ```c
 Talk is weak，show your code plz.
@@ -164,6 +168,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result35.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -214,6 +220,8 @@ Talk is weak，show your code plz.
 在 `n<=100` 的条件下，这是最直接也最稳妥的做法。
 
 ## 代码实现
+
+![提交记录截图](result36.png)
 
 ```c
 Talk is weak，show your code plz.

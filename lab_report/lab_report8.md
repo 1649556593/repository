@@ -68,6 +68,8 @@
 
 ## 代码实现
 
+![提交记录截图](result29.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -120,6 +122,8 @@ Talk is weak，show your code plz.
 - 空间复杂度：$O(n)$，主要来自存树结构和递归栈。
 
 ## 代码实现
+
+![提交记录截图](result30.png)
 
 ```c
 Talk is weak，show your code plz.
@@ -175,6 +179,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result31.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -225,6 +231,8 @@ Talk is weak，show your code plz.
 这比通用排序算法更加高效，也更贴合本题的数据特点。
 
 ## 代码实现
+
+![提交记录截图](result32.png)
 
 ```c
 Talk is weak，show your code plz.

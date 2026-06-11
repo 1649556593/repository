@@ -63,6 +63,8 @@
 
 ## 代码实现
 
+![提交记录截图](result13.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -115,6 +117,8 @@ Talk is weak，show your code plz.
 在 $1000$ 位的规模下，这种做法非常轻松。
 
 ## 代码实现
+
+![提交记录截图](result14.png)
 
 ```c
 Talk is weak，show your code plz.
@@ -172,6 +176,8 @@ IPv6 地址固定只有 $8$ 组，因此完全可以先把它拆成 $8$ 段后�
 
 ## 代码实现
 
+![提交记录截图](result15.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -225,6 +231,8 @@ Talk is weak，show your code plz.
 在文章长度较大的情况下，线性扫描是最稳妥的做法。
 
 ## 代码实现
+
+![提交记录截图](result16.png)
 
 ```c
 Talk is weak，show your code plz.

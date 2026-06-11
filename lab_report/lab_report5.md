@@ -72,6 +72,8 @@
 
 ## 代码实现
 
+![提交记录截图](result17.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -130,6 +132,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result18.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -176,6 +180,8 @@ Talk is weak，show your code plz.
 这是矩阵转置最直接、也最清晰的实现方式。
 
 ## 代码实现
+
+![提交记录截图](result19.png)
 
 ```c
 Talk is weak，show your code plz.
@@ -227,6 +233,8 @@ Talk is weak，show your code plz.
 在题目给定的范围下，这样的复杂度非常宽松。
 
 ## 代码实现
+
+![提交记录截图](result20.png)
 
 ```c
 Talk is weak，show your code plz.

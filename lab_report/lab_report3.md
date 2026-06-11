@@ -64,6 +64,8 @@
 
 ## 代码实现
 
+![提交记录截图](result9.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -116,6 +118,8 @@ Talk is weak，show your code plz.
 在本题的限制下，这个复杂度完全可以接受。
 
 ## 代码实现
+
+![提交记录截图](result10.png)
 
 ```c
 Talk is weak，show your code plz.
@@ -171,6 +175,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result11.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -222,6 +228,8 @@ Talk is weak，show your code plz.
 这正是应对大规模输入的高效做法。
 
 ## 代码实现
+
+![提交记录截图](result12.png)
 
 ```c
 Talk is weak，show your code plz.

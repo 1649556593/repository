@@ -66,6 +66,8 @@
 
 ## 代码实现
 
+![提交记录截图](result25.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -123,6 +125,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result26.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -178,6 +182,8 @@ Talk is weak，show your code plz.
 
 ## 代码实现
 
+![提交记录截图](result27.png)
+
 ```c
 Talk is weak，show your code plz.
 ```
@@ -229,6 +235,8 @@ Talk is weak，show your code plz.
 在线性复杂度下可以稳妥通过 `10^5` 规模的数据。
 
 ## 代码实现
+
+![提交记录截图](result28.png)
 
 ```c
 Talk is weak，show your code plz.
