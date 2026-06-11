@@ -72,6 +72,8 @@
 
 ## 代码实现
 
+![提交记录截图](result17.png)
+
 ```c
 #include<stdio.h>
 #include<string.h>
@@ -200,6 +202,8 @@ int main()
 由于字符串长度上限很低，直接模拟是最稳妥的方案。
 
 ## 代码实现
+
+![提交记录截图](result18.png)
 
 ```c
 #include<stdio.h>
@@ -332,6 +336,8 @@ int main()
 
 ## 代码实现
 
+![提交记录截图](result19.png)
+
 ```c
 #include<stdio.h>
 #include <stdlib.h>
@@ -404,6 +410,8 @@ int main()
 在题目给定的范围下，这样的复杂度非常宽松。
 
 ## 代码实现
+
+![提交记录截图](result20.png)
 
 ```c
 #include<stdio.h>

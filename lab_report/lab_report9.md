@@ -64,6 +64,8 @@
 
 ## 代码实现
 
+![提交记录截图](result33.png)
+
 ```c
 #include<stdio.h>
 #include<stdlib.h>
@@ -157,6 +159,8 @@ int main()
 
 ## 代码实现
 
+![提交记录截图](result34.png)
+
 ```c
 #include<stdio.h>
 #include<stdlib.h>
@@ -233,6 +237,8 @@ int main()
 对于 `100` 级别的数据，任何常规排序实现都很轻松。
 
 ## 代码实现
+
+![提交记录截图](result35.png)
 
 ```c
 #include<stdio.h>
@@ -330,6 +336,8 @@ int main()
 在 `n<=100` 的条件下，这是最直接也最稳妥的做法。
 
 ## 代码实现
+
+![提交记录截图](result36.png)
 
 ```c
 #include<stdio.h>
