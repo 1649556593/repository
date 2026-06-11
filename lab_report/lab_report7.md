@@ -6,7 +6,7 @@
 
 学号：8208250831
 
-日期：2026.6.11
+日期：2026.5.17
 
 # 总览
 
@@ -67,7 +67,7 @@
 
 ## 代码实现
 
-![提交记录截图](result25.png)
+![提交记录截图](result26.png)
 
 ```c
 #include<stdio.h>
@@ -190,7 +190,7 @@ int main()
 
 ## 代码实现
 
-![提交记录截图](result26.png)
+![提交记录截图](result27.png)
 
 ```c
 #include <stdio.h>
@@ -366,7 +366,7 @@ int main()
 
 ## 代码实现
 
-![提交记录截图](result27.png)
+![提交记录截图](result28.png)
 
 ```c
 #include<stdio.h>
@@ -481,7 +481,7 @@ int main()
 
 ## 代码实现
 
-![提交记录截图](result28.png)
+![提交记录截图](result25.png)
 
 ```c
 #include<stdio.h>
