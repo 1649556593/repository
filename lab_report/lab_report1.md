@@ -14,16 +14,13 @@
 
 | 题目名称 | 难度 | 知识点 |
 | -------- | ---- | ------ |
-|校门外的树 |入门|布尔数组|
+|P1047 校门外的树 |入门|布尔数组|
 |P3156 询问学号|入门|数组、顺序存储|
 |P1996 约瑟夫问题|普及|队列、模拟|
 |P1160 队列安排|普及/提高-|双向链表、链表模拟|
 
-# （一）题目名称
-1.校门外的树
-2.询问学号
-3.约瑟夫问题
-4.队列安排
+# （一）P1047 校门外的树
+
 ## 题目信息
 
 题目链接：[https://www.luogu.com.cn/problem/P1047](https://www.luogu.com.cn/problem/P1047)
@@ -94,7 +91,7 @@ int main()
 }
 ```
 
-# （二）P3156 【深基15.例1】询问学号
+# （二）P3156 询问学号
 
 ## 题目信息
 
@@ -142,10 +139,27 @@ int main()
 ![提交记录截图](result2.png)
 
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+    int m,n;
+    scanf("%d %d",&m,&n);
+    int* arr=(int*)malloc((m+1)*sizeof(int));
+    for(int i=1;i<=m;i++)
+    {
+        int temp=0;
+        scanf(" %d",&temp);
+        arr[i]=temp;
+    }
+    for(int i=0;i<n;i++)
+    {
+        int temp=0;
+        scanf(" %d",&temp);
+        printf("%d\n",arr[temp]);
+    }
+}
 ```
-
----
 
 # （三）P1996 约瑟夫问题
 
@@ -196,10 +210,38 @@ Talk is weak，show your code plz.
 ![提交记录截图](result3.png)
 
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+    int n,m;
+    scanf("%d %d",&n,&m);
+    int* arr=(int*)malloc(n*sizeof(int));
+    int idx=0;
+    for(int i=0;i<n;i++)
+    {
+        arr[i]=1;
+    }
+    int num=0;
+    int count=0;
+    while(num<n)
+    {
+        if(arr[idx]==1)
+        {
+            count++;
+        }
+        if(count==m)
+        {
+            printf("%d ",idx+1);
+            num++;
+            count=0;
+            arr[idx]=0;
+        }
+        idx=(idx+1)%n;
+    }
+    free(arr);
+}
 ```
-
----
 
 # （四）P1160 队列安排
 
@@ -249,5 +291,76 @@ Talk is weak，show your code plz.
 ![提交记录截图](result4.png)
 
 ```c
-Talk is weak，show your code plz.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define max 100010
+int main()
+{
+	int pre[max] = { 0 };
+	int aft[max] = { 0 };
+	int del[max] = { 0 };
+	int n = 0;
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++)
+	{
+		del[i] = 1;
+	}
+	for (int i = 0; i < n - 1; i++)
+	{
+		int k = 0;
+		int p = 0;
+		scanf("%d %d", &k, &p);
+		if (p == 0)
+		{
+			int oldpre = pre[k];
+			pre[k] = i + 2;
+			pre[i + 2] = oldpre;
+			aft[i + 2] = k;
+			aft[oldpre] = i + 2;
+		}
+		else
+		{
+			int oldaft = aft[k];
+			aft[k] = i + 2;
+			aft[i + 2] = oldaft;
+			pre[i + 2] = k;
+			pre[oldaft] = i + 2;
+		}
+	}
+	int m = 0;
+	scanf("%d", &m);
+	for (int i = 0; i < m; i++)
+	{
+		int temp = 0;
+		scanf(" %d", &temp);
+		if (del[temp] == 1)
+		{
+			int temp1 = pre[temp];
+			int temp2 = aft[temp];
+			aft[temp1] = temp2;
+			pre[temp2] = temp1;
+			del[temp] = 0;
+		}
+	}
+	int start = 0;
+	for (int i = 1; i <= n; i++)
+	{
+		if (pre[i] == 0)
+		{
+			start = i;
+			break;
+		}
+	}
+	while (start != 0)
+	{
+		if (del[start] == 1)
+		{
+			printf("%d ", start);
+		}
+		start = aft[start];
+	}
+	return 0;
+}
 ```
+
