@@ -61,7 +61,146 @@
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <string.h>
+
+#define MAXN 10005
+#define MAXM 40005
+#define INF 0x3f3f3f3f
+
+int head[MAXN];
+int to[MAXM];
+int nxt[MAXM];
+int w[MAXM];
+int cnt;
+
+void add(int u,int v,int val)
+{
+    to[++cnt]=v;
+    w[cnt]=val;
+    nxt[cnt]=head[u];
+    head[u]=cnt;
+}
+
+int dist[MAXN];
+int vis[MAXN];
+
+typedef struct
+{
+    int d;
+    int id;
+}Node;
+
+Node heap[200005];
+int sz;
+
+void push(int d,int id)
+{
+    heap[++sz].d=d;
+    heap[sz].id=id;
+
+    int i=sz;
+
+    while(i>1)
+    {
+        int p=i/2;
+
+        if(heap[p].d<=heap[i].d)
+            break;
+
+        Node t=heap[p];
+        heap[p]=heap[i];
+        heap[i]=t;
+
+        i=p;
+    }
+}
+
+Node pop()
+{
+    Node ret=heap[1];
+
+    heap[1]=heap[sz--];
+
+    int i=1;
+
+    while(1)
+    {
+        int s=i;
+        int l=i*2;
+        int r=i*2+1;
+
+        if(l<=sz && heap[l].d<heap[s].d)
+            s=l;
+
+        if(r<=sz && heap[r].d<heap[s].d)
+            s=r;
+
+        if(s==i) break;
+
+        Node t=heap[s];
+        heap[s]=heap[i];
+        heap[i]=t;
+
+        i=s;
+    }
+
+    return ret;
+}
+
+int main()
+{
+    int n,m,s,t;
+
+    scanf("%d%d%d%d",&n,&m,&s,&t);
+
+    for(int i=1;i<=m;i++)
+    {
+        int u,v,val;
+
+        scanf("%d%d%d",&u,&v,&val);
+
+        add(u,v,val);
+        add(v,u,val);
+    }
+
+    memset(dist,0x3f,sizeof(dist));
+
+    dist[s]=0;
+
+    push(0,s);
+
+    while(sz)
+    {
+        Node cur=pop();
+
+        int u=cur.id;
+
+        if(vis[u]) continue;
+
+        vis[u]=1;
+
+        for(int i=head[u];i;i=nxt[i])
+        {
+            int v=to[i];
+
+            int nd=dist[u];
+
+            if(w[i]>nd)
+                nd=w[i];
+
+            if(nd<dist[v])
+            {
+                dist[v]=nd;
+                push(nd,v);
+            }
+        }
+    }
+
+    printf("%d\n",dist[t]);
+
+    return 0;
+}
 ```
 
 ---
@@ -113,7 +252,88 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+
+#define N 5005
+#define M 500005
+#define MOD 80112002
+
+int head[N], to[M], nxt[M], idx;
+int indeg[N], outdeg[N];
+int dp[N];
+
+int q[N];
+int front, rear;
+
+void add(int u, int v)
+{
+    to[idx] = v;
+    nxt[idx] = head[u];
+    head[u] = idx++;
+}
+
+int main()
+{
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    for (int i = 1; i <= n; i++)
+        head[i] = -1;
+
+    for (int i = 0; i < m; i++)
+    {
+        int a, b;
+        scanf("%d%d", &a, &b);
+
+        add(a, b);
+
+        indeg[b]++;
+        outdeg[a]++;
+    }
+
+    front = rear = 0;
+
+    /* 所有生产者入队 */
+    for (int i = 1; i <= n; i++)
+    {
+        if (indeg[i] == 0)
+        {
+            dp[i] = 1;
+            q[rear++] = i;
+        }
+    }
+
+    /* 拓扑排序 + DP */
+    while (front < rear)
+    {
+        int u = q[front++];
+
+        for (int i = head[u]; i != -1; i = nxt[i])
+        {
+            int v = to[i];
+
+            dp[v] = (dp[v] + dp[u]) % MOD;
+
+            indeg[v]--;
+
+            if (indeg[v] == 0)
+                q[rear++] = v;
+        }
+    }
+
+    long long ans = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        if (outdeg[i] == 0)
+        {
+            ans = (ans + dp[i]) % MOD;
+        }
+    }
+
+    printf("%lld\n", ans);
+
+    return 0;
+}
 ```
 
 ---
@@ -162,7 +382,159 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <string.h>
+
+#define N 10005
+#define M 500005
+#define INF 2147483647
+
+typedef struct
+{
+    int to;
+    int w;
+    int next;
+}Edge;
+
+Edge edge[M];
+
+int head[N];
+int cnt;
+
+long long dist[N];
+int vis[N];
+
+void add(int u,int v,int w)
+{
+    edge[cnt].to=v;
+    edge[cnt].w=w;
+    edge[cnt].next=head[u];
+    head[u]=cnt++;
+}
+
+typedef struct
+{
+    int id;
+    long long dis;
+}Node;
+
+Node heap[M];
+int size;
+
+void swap(Node *a,Node *b)
+{
+    Node t=*a;
+    *a=*b;
+    *b=t;
+}
+
+void push(Node x)
+{
+    heap[++size]=x;
+
+    int i=size;
+
+    while(i>1)
+    {
+        int fa=i/2;
+
+        if(heap[fa].dis<=heap[i].dis)
+            break;
+
+        swap(&heap[fa],&heap[i]);
+        i=fa;
+    }
+}
+
+Node pop()
+{
+    Node ret=heap[1];
+
+    heap[1]=heap[size--];
+
+    int i=1;
+
+    while(1)
+    {
+        int smallest=i;
+        int l=i*2;
+        int r=i*2+1;
+
+        if(l<=size && heap[l].dis<heap[smallest].dis)
+            smallest=l;
+
+        if(r<=size && heap[r].dis<heap[smallest].dis)
+            smallest=r;
+
+        if(smallest==i)
+            break;
+
+        swap(&heap[i],&heap[smallest]);
+        i=smallest;
+    }
+
+    return ret;
+}
+
+int main()
+{
+    int n,m,s;
+
+    scanf("%d%d%d",&n,&m,&s);
+
+    memset(head,-1,sizeof(head));
+
+    for(int i=0;i<m;i++)
+    {
+        int u,v,w;
+
+        scanf("%d%d%d",&u,&v,&w);
+
+        add(u,v,w);
+    }
+
+    for(int i=1;i<=n;i++)
+        dist[i]=INF;
+
+    dist[s]=0;
+
+    push((Node){s,0});
+
+    while(size)
+    {
+        Node cur=pop();
+
+        int u=cur.id;
+
+        if(vis[u])
+            continue;
+
+        vis[u]=1;
+
+        for(int i=head[u];i!=-1;i=edge[i].next)
+        {
+            int v=edge[i].to;
+            int w=edge[i].w;
+
+            if(dist[v]>dist[u]+w)
+            {
+                dist[v]=dist[u]+w;
+
+                push((Node){v,dist[v]});
+            }
+        }
+    }
+
+    for(int i=1;i<=n;i++)
+    {
+        if(dist[i]==INF)
+            printf("%d ",INF);
+        else
+            printf("%lld ",dist[i]);
+    }
+
+    return 0;
+}
 ```
 
 ---
@@ -212,5 +584,157 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <string.h>
+
+#define N 100005
+#define M 200005
+#define INF 0x3f3f3f3f3f3f3f3fLL
+
+typedef struct
+{
+    int to;
+    int w;
+    int next;
+}Edge;
+
+Edge edge[M];
+
+int head[N];
+int cnt;
+
+long long dist[N];
+int vis[N];
+
+void add(int u,int v,int w)
+{
+    edge[cnt].to=v;
+    edge[cnt].w=w;
+    edge[cnt].next=head[u];
+    head[u]=cnt++;
+}
+
+typedef struct
+{
+    int id;
+    long long dis;
+}Node;
+
+Node heap[M * 2];
+int size;
+
+void swap(Node *a,Node *b)
+{
+    Node t=*a;
+    *a=*b;
+    *b=t;
+}
+
+void push(Node x)
+{
+    heap[++size]=x;
+
+    int i=size;
+
+    while(i>1)
+    {
+        int fa=i>>1;
+
+        if(heap[fa].dis<=heap[i].dis)
+            break;
+
+        swap(&heap[fa],&heap[i]);
+
+        i=fa;
+    }
+}
+
+Node pop()
+{
+    Node ret=heap[1];
+
+    heap[1]=heap[size--];
+
+    int i=1;
+
+    while(1)
+    {
+        int l=i<<1;
+        int r=l|1;
+        int smallest=i;
+
+        if(l<=size &&
+           heap[l].dis<heap[smallest].dis)
+            smallest=l;
+
+        if(r<=size &&
+           heap[r].dis<heap[smallest].dis)
+            smallest=r;
+
+        if(smallest==i)
+            break;
+
+        swap(&heap[i],&heap[smallest]);
+
+        i=smallest;
+    }
+
+    return ret;
+}
+
+int main()
+{
+    int n,m,s;
+
+    scanf("%d%d%d",&n,&m,&s);
+
+    memset(head,-1,sizeof(head));
+
+    for(int i=0;i<m;i++)
+    {
+        int u,v,w;
+
+        scanf("%d%d%d",&u,&v,&w);
+
+        add(u,v,w);
+    }
+
+    memset(dist,0x3f,sizeof(dist));
+
+    dist[s]=0;
+
+    push((Node){s,0});
+
+    while(size)
+    {
+        Node cur=pop();
+
+        int u=cur.id;
+
+        if(vis[u])
+            continue;
+
+        vis[u]=1;
+
+        for(int i=head[u];
+            i!=-1;
+            i=edge[i].next)
+        {
+            int v=edge[i].to;
+            int w=edge[i].w;
+
+            if(dist[v] > dist[u] + w)
+            {
+                dist[v] = dist[u] + w;
+
+                push((Node){v,dist[v]});
+            }
+        }
+    }
+
+    for(int i=1;i<=n;i++)
+        printf("%lld ",dist[i]);
+
+    return 0;
+}
 ```

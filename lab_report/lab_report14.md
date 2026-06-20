@@ -66,7 +66,169 @@
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <string.h>
+
+#define N 50005
+#define M 200005
+#define INF 0x3f3f3f3f3f3f3f3fLL
+
+typedef long long ll;
+
+typedef struct
+{
+    int to;
+    int w;
+    int next;
+}Edge;
+
+Edge edge[M];
+
+int head[N];
+int idx;
+
+void add(int u,int v,int w)
+{
+    edge[idx].to=v;
+    edge[idx].w=w;
+    edge[idx].next=head[u];
+    head[u]=idx++;
+}
+
+ll dist[N];
+int vis[N];
+
+typedef struct
+{
+    int id;
+    ll dis;
+}Node;
+
+Node heap[M];
+int size;
+
+void swap(Node *a,Node *b)
+{
+    Node t=*a;
+    *a=*b;
+    *b=t;
+}
+
+void push(Node x)
+{
+    heap[++size]=x;
+
+    int i=size;
+
+    while(i>1)
+    {
+        int fa=i/2;
+
+        if(heap[fa].dis<=heap[i].dis)
+            break;
+
+        swap(&heap[fa],&heap[i]);
+        i=fa;
+    }
+}
+
+Node pop()
+{
+    Node ret=heap[1];
+
+    heap[1]=heap[size--];
+
+    int i=1;
+
+    while(1)
+    {
+        int l=i*2;
+        int r=i*2+1;
+        int smallest=i;
+
+        if(l<=size && heap[l].dis<heap[smallest].dis)
+            smallest=l;
+
+        if(r<=size && heap[r].dis<heap[smallest].dis)
+            smallest=r;
+
+        if(smallest==i)
+            break;
+
+        swap(&heap[i],&heap[smallest]);
+        i=smallest;
+    }
+
+    return ret;
+}
+
+void dijkstra(int n)
+{
+    memset(vis,0,sizeof(vis));
+
+    for(int i=1;i<=n;i++)
+        dist[i]=INF;
+
+    dist[1]=0;
+
+    push((Node){1,0});
+
+    while(size)
+    {
+        Node cur=pop();
+
+        int u=cur.id;
+
+        if(vis[u])
+            continue;
+
+        vis[u]=1;
+
+        for(int i=head[u];i!=-1;i=edge[i].next)
+        {
+            int v=edge[i].to;
+            int w=edge[i].w;
+
+            if(dist[v]>dist[u]+w)
+            {
+                dist[v]=dist[u]+w;
+                push((Node){v,dist[v]});
+            }
+        }
+    }
+}
+
+int main()
+{
+    int n,m,b;
+
+    scanf("%d%d%d",&n,&m,&b);
+
+    memset(head,-1,sizeof(head));
+
+    for(int i=0;i<m;i++)
+    {
+        int u,v,w;
+
+        scanf("%d%d%d",&u,&v,&w);
+
+        add(u,v,w);
+        add(v,u,w);
+    }
+
+    dijkstra(n);
+
+    while(b--)
+    {
+        int p,q;
+
+        scanf("%d%d",&p,&q);
+
+        printf("%lld\n",dist[p]+dist[q]);
+    }
+
+    return 0;
+}
 ```
 
 ---
@@ -121,5 +283,150 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <string.h>
+
+#define N 1005
+#define M 20005
+#define INF 0x3f3f3f3f
+
+typedef struct {
+    int to;
+    int w;
+    int next;
+} Edge;
+
+Edge edge[M];
+int head[N], idx;
+
+int iso[N];
+int dist[N];
+int vis[N];
+
+typedef struct {
+    int id;
+    int dis;
+} Node;
+
+Node heap[M];
+int sz;
+
+void add(int u, int v, int w)
+{
+    edge[idx].to = v;
+    edge[idx].w = w;
+    edge[idx].next = head[u];
+    head[u] = idx++;
+}
+
+void swap(Node *a, Node *b)
+{
+    Node t = *a;
+    *a = *b;
+    *b = t;
+}
+
+void push(Node x)
+{
+    heap[++sz] = x;
+
+    int i = sz;
+    while (i > 1)
+    {
+        int fa = i / 2;
+
+        if (heap[fa].dis <= heap[i].dis)
+            break;
+
+        swap(&heap[fa], &heap[i]);
+        i = fa;
+    }
+}
+
+Node pop()
+{
+    Node ret = heap[1];
+
+    heap[1] = heap[sz--];
+
+    int i = 1;
+
+    while (1)
+    {
+        int smallest = i;
+        int l = i * 2;
+        int r = i * 2 + 1;
+
+        if (l <= sz && heap[l].dis < heap[smallest].dis)
+            smallest = l;
+
+        if (r <= sz && heap[r].dis < heap[smallest].dis)
+            smallest = r;
+
+        if (smallest == i)
+            break;
+
+        swap(&heap[i], &heap[smallest]);
+        i = smallest;
+    }
+
+    return ret;
+}
+
+int main()
+{
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    for (int i = 1; i <= n; i++)
+        scanf("%d", &iso[i]);
+
+    memset(head, -1, sizeof(head));
+
+    for (int i = 0; i < m; i++)
+    {
+        int u, v, w;
+        scanf("%d%d%d", &u, &v, &w);
+
+        add(u, v, w);
+        add(v, u, w);
+    }
+
+    memset(dist, 0x3f, sizeof(dist));
+
+    dist[1] = 0;
+
+    push((Node){1, 0});
+
+    while (sz)
+    {
+        Node cur = pop();
+        int u = cur.id;
+
+        if (vis[u])
+            continue;
+
+        vis[u] = 1;
+
+        for (int i = head[u]; i != -1; i = edge[i].next)
+        {
+            int v = edge[i].to;
+
+            int cost = edge[i].w;
+
+            if (v != n)
+                cost += iso[v];
+
+            if (dist[v] > dist[u] + cost)
+            {
+                dist[v] = dist[u] + cost;
+                push((Node){v, dist[v]});
+            }
+        }
+    }
+
+    printf("%d\n", dist[n]);
+
+    return 0;
+}
 ```

@@ -65,7 +65,73 @@
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+
+int n;
+int ans[20];
+
+int col[20];
+int diag1[40];
+int diag2[40];
+
+long long cnt = 0;
+
+void dfs(int row)
+{
+    if(row > n)
+    {
+        cnt++;
+
+        if(cnt <= 3)
+        {
+            for(int i = 1; i <= n; i++)
+            {
+                printf("%d", ans[i]);
+
+                if(i != n)
+                    printf(" ");
+            }
+            printf("\n");
+        }
+
+        return;
+    }
+
+    for(int c = 1; c <= n; c++)
+    {
+        if(col[c])
+            continue;
+
+        if(diag1[row - c + n])
+            continue;
+
+        if(diag2[row + c])
+            continue;
+
+        ans[row] = c;
+
+        col[c] = 1;
+        diag1[row - c + n] = 1;
+        diag2[row + c] = 1;
+
+        dfs(row + 1);
+
+        col[c] = 0;
+        diag1[row - c + n] = 0;
+        diag2[row + c] = 0;
+    }
+}
+
+int main()
+{
+    scanf("%d", &n);
+
+    dfs(1);
+
+    printf("%lld\n", cnt);
+
+    return 0;
+}
 ```
 
 ---
@@ -114,7 +180,62 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+
+#define MAXN 100005
+#define MAXM 100005
+
+int head[MAXN];
+int to[MAXM];
+int nxt[MAXM];
+int cnt;
+
+int ans[MAXN];
+
+void add(int u,int v)
+{
+    to[++cnt]=v;
+    nxt[cnt]=head[u];
+    head[u]=cnt;
+}
+
+void dfs(int x,int val)
+{
+    if(ans[x]) return;
+
+    ans[x]=val;
+
+    for(int i=head[x];i;i=nxt[i])
+    {
+        dfs(to[i],val);
+    }
+}
+
+int main()
+{
+    int n,m;
+    scanf("%d%d",&n,&m);
+
+    for(int i=1;i<=m;i++)
+    {
+        int u,v;
+        scanf("%d%d",&u,&v);
+
+        add(v,u);   // 建反图
+    }
+
+    for(int i=n;i>=1;i--)
+    {
+        dfs(i,i);
+    }
+
+    for(int i=1;i<=n;i++)
+    {
+        printf("%d ",ans[i]);
+    }
+
+    return 0;
+}
 ```
 
 ---
@@ -163,7 +284,82 @@ Kruskal 的核心是“排序 + 并查集判环”。在本题的数据规模下
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAXM 200005
+#define MAXN 5005
+
+typedef struct
+{
+    int u;
+    int v;
+    int w;
+}Edge;
+
+Edge edge[MAXM];
+
+int fa[MAXN];
+
+int cmp(const void *a,const void *b)
+{
+    return ((Edge *)a)->w - ((Edge *)b)->w;
+}
+
+int find(int x)
+{
+    if(fa[x]==x)
+        return x;
+
+    return fa[x]=find(fa[x]);
+}
+
+int main()
+{
+    int n,m;
+
+    scanf("%d%d",&n,&m);
+
+    for(int i=1;i<=m;i++)
+    {
+        scanf("%d%d%d",
+              &edge[i].u,
+              &edge[i].v,
+              &edge[i].w);
+    }
+
+    for(int i=1;i<=n;i++)
+        fa[i]=i;
+
+    qsort(edge+1,m,sizeof(Edge),cmp);
+
+    long long ans=0;
+    int cnt=0;
+
+    for(int i=1;i<=m;i++)
+    {
+        int fu=find(edge[i].u);
+        int fv=find(edge[i].v);
+
+        if(fu!=fv)
+        {
+            fa[fu]=fv;
+
+            ans+=edge[i].w;
+            cnt++;
+
+            if(cnt==n-1)
+                break;
+        }
+    }
+
+    if(cnt==n-1)
+        printf("%lld\n",ans);
+    else
+        printf("orz\n");
+
+    return 0;
+}
 ```
 
 ---
@@ -211,5 +407,65 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+
+#define INF 1000000000
+
+int g[105][105];
+int dist[105];
+int vis[105];
+
+int main()
+{
+    int n;
+
+    scanf("%d",&n);
+
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            scanf("%d",&g[i][j]);
+        }
+    }
+
+    for(int i=1;i<=n;i++)
+    {
+        dist[i]=g[1][i];
+    }
+
+    vis[1]=1;
+
+    int ans=0;
+
+    for(int i=1;i<n;i++)
+    {
+        int mn=INF;
+        int k=-1;
+
+        for(int j=1;j<=n;j++)
+        {
+            if(!vis[j] && dist[j]<mn)
+            {
+                mn=dist[j];
+                k=j;
+            }
+        }
+
+        vis[k]=1;
+        ans+=dist[k];
+
+        for(int j=1;j<=n;j++)
+        {
+            if(!vis[j] && g[k][j]<dist[j])
+            {
+                dist[j]=g[k][j];
+            }
+        }
+    }
+
+    printf("%d\n",ans);
+
+    return 0;
+}
 ```

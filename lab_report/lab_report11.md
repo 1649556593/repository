@@ -63,7 +63,102 @@
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <time.h>
+
+typedef unsigned long long ull;
+typedef unsigned int u32;
+
+static char buf[1 << 23];
+static size_t p1 = 0, p2 = 0;
+
+static inline int gc(void) 
+{
+    if (p1 == p2) 
+    {
+        p2 = fread(buf, 1, sizeof(buf), stdin);
+        p1 = 0;
+        if (p1 == p2) return EOF;
+    }
+    return buf[p1++];
+}
+
+static inline ull rd(void) 
+{
+    ull x = 0;
+    int ch = gc();
+    while (ch < '0' || ch > '9') ch = gc();
+    while (ch >= '0' && ch <= '9') 
+    {
+        x = x * 10 + (ull)(ch - '0');
+        ch = gc();
+    }
+    return x;
+}
+
+static inline ull splitmix64(ull x) 
+{
+    x += 0x9e3779b97f4a7c15ULL;
+    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
+    return x ^ (x >> 31);
+}
+
+int main(void) 
+{
+    u32 n = (u32)rd();
+    u32 m = 1;
+    u32 tot = 0;
+    ull ans = 0;
+    ull seed;
+
+    while (m < (n << 1)) m <<= 1;
+
+    u32 *head = (u32 *)calloc(m, sizeof(u32));
+    u32 *next = (u32 *)calloc((size_t)n + 1, sizeof(u32));
+    ull *key = (ull *)malloc(((size_t)n + 1) * sizeof(ull));
+    ull *val = (ull *)malloc(((size_t)n + 1) * sizeof(ull));
+
+    if (!head || !next || !key || !val) return 0;
+
+    seed = ((ull)(uintptr_t)head >> 4) ^ (ull)clock() ^ 0x9e3779b97f4a7c15ULL;
+
+    for (u32 i = 1; i <= n; ++i) 
+    {
+        ull x = rd();
+        ull y = rd();
+        u32 h = (u32)(splitmix64(x + seed) & (ull)(m - 1));
+        u32 p = head[h];
+        ull cur = 0;
+
+        while (p && key[p] != x) p = next[p];
+
+        if (p) 
+        {
+            cur = val[p];
+            val[p] = y;
+        } else 
+        {
+            ++tot;
+            key[tot] = x;
+            val[tot] = y;
+            next[tot] = head[h];
+            head[h] = tot;
+        }
+
+        ans += (ull)i * cur;
+    }
+
+    printf("%llu\n", ans);
+
+    free(head);
+    free(next);
+    free(key);
+    free(val);
+    return 0;
+}
 ```
 
 ---
@@ -111,7 +206,47 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+
+#define N 200005
+
+int fa[N];
+
+int find(int x)
+{
+    if (fa[x] == x)
+        return x;
+    return fa[x] = find(fa[x]);
+}
+
+int main()
+{
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    for (int i = 1; i <= n; i++)
+        fa[i] = i;
+
+    while (m--)
+    {
+        int z, x, y;
+        scanf("%d%d%d", &z, &x, &y);
+
+        if (z == 1)
+        {
+            fa[find(x)] = find(y);
+        }
+        else
+        {
+            if (find(x) == find(y))
+                printf("Y\n");
+            else
+                printf("N\n");
+        }
+    }
+
+    return 0;
+}
 ```
 
 ---
@@ -159,7 +294,50 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+
+int fa[5005];
+
+int find(int x)
+{
+    if (fa[x] == x)
+        return x;
+    return fa[x] = find(fa[x]); 
+}
+
+void merge(int x, int y)
+{
+    fa[find(x)] = find(y);
+}
+
+int main()
+{
+    int n, m, p;
+    scanf("%d%d%d", &n, &m, &p);
+
+    for (int i = 1; i <= n; i++)
+        fa[i] = i;
+
+    for (int i = 0; i < m; i++)
+    {
+        int x, y;
+        scanf("%d%d", &x, &y);
+        merge(x, y);
+    }
+
+    for (int i = 0; i < p; i++)
+    {
+        int x, y;
+        scanf("%d%d", &x, &y);
+
+        if (find(x) == find(y))
+            printf("Yes\n");
+        else
+            printf("No\n");
+    }
+
+    return 0;
+}
 ```
 
 ---
@@ -208,5 +386,105 @@ Talk is weak，show your code plz.
 ## 代码实现
 
 ```c
-Talk is weak，show your code plz.
+#include <stdio.h>
+#include <string.h>
+
+#define MAXN 1005
+
+typedef struct
+{
+    long long w;
+    int parent;
+    int lchild;
+    int rchild;
+}HTNode;
+
+HTNode ht[MAXN * 2];
+
+char word[MAXN][25];
+char code[MAXN][2005];
+
+int main()
+{
+    int n;
+    scanf("%d",&n);
+
+    for(int i=1;i<=n;i++)
+    {
+        scanf("%s%lld",word[i],&ht[i].w);
+
+        ht[i].parent=0;
+        ht[i].lchild=0;
+        ht[i].rchild=0;
+    }
+
+    if(n==1)
+    {
+        printf("%s 0\n",word[1]);
+        return 0;
+    }
+
+    int m=2*n-1;
+
+    for(int i=n+1;i<=m;i++)
+    {
+        int s1=0,s2=0;
+
+        for(int j=1;j<i;j++)
+        {
+            if(ht[j].parent)
+                continue;
+
+            if(s1==0 || ht[j].w < ht[s1].w)
+            {
+                s2=s1;
+                s1=j;
+            }
+            else if(s2==0 || ht[j].w < ht[s2].w)
+            {
+                s2=j;
+            }
+        }
+
+        ht[s1].parent=i;
+        ht[s2].parent=i;
+
+        ht[i].lchild=s1;
+        ht[i].rchild=s2;
+
+        ht[i].w=ht[s1].w+ht[s2].w;
+    }
+
+    char temp[2005];
+
+    for(int i=1;i<=n;i++)
+    {
+        int len=0;
+        int cur=i;
+        int p=ht[cur].parent;
+
+        while(p)
+        {
+            if(ht[p].lchild==cur)
+                temp[len++]='0';
+            else
+                temp[len++]='1';
+
+            cur=p;
+            p=ht[cur].parent;
+        }
+
+        for(int j=0;j<len;j++)
+            code[i][j]=temp[len-1-j];
+
+        code[i][len]='\0';
+    }
+
+    for(int i=1;i<=n;i++)
+    {
+        printf("%s %s\n",word[i],code[i]);
+    }
+
+    return 0;
+}
 ```
