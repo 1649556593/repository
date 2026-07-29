@@ -1,6 +1,6 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
+#include <cstdlib>
 using namespace std;
 // 内存分配模型
 // 代码区：存放函数的二进制代码，由操作系统进行管理，代码区是共享且只读的
@@ -1685,117 +1685,117 @@ using namespace std;
 // 先抽象出三个零件的类
 // 然后具体出什么厂商的零件，不同厂商的零件调用的工作函数不相同，用到多态
 // 创造电脑接口，先构造电脑，然后不同的零件有分别对应的工作函数（多态），然后进行工作函数
-class CPU // CPU
-{
-public:
-    virtual void calculate() = 0;
-};
-class VideoCard // 显卡
-{
-public:
-    virtual void display() = 0;
-};
-class Memory // 内存条
-{
-public:
-    virtual void storage() = 0;
-};
+// class CPU // CPU
+// {
+// public:
+//     virtual void calculate() = 0;
+// };
+// class VideoCard // 显卡
+// {
+// public:
+//     virtual void display() = 0;
+// };
+// class Memory // 内存条
+// {
+// public:
+//     virtual void storage() = 0;
+// };
 
-class IntelCPU : public CPU
-{
-public:
-    virtual void calculate()
-    {
-        cout << "intel的CPU开始计算了" << endl;
-    }
-};
-class IntelVideoCard : public VideoCard
-{
-public:
-    virtual void display()
-    {
-        cout << "intel的显卡开始显示了" << endl;
-    }
-};
-class IntelMemory : public Memory
-{
-public:
-    virtual void storage()
-    {
-        cout << "intel的内存条开始存储了" << endl;
-    }
-};
-class LenovoCPU : public CPU
-{
-public:
-    virtual void calculate()
-    {
-        cout << "Lenovo的CPU开始计算了" << endl;
-    }
-};
-class LenovoVideoCard : public VideoCard
-{
-public:
-    virtual void display()
-    {
-        cout << "Lenovo的显卡开始显示了" << endl;
-    }
-};
-class LenovoMemory : public Memory
-{
-public:
-    virtual void storage()
-    {
-        cout << "Lenovo的内存条开始存储了" << endl;
-    }
-};
+// class IntelCPU : public CPU
+// {
+// public:
+//     virtual void calculate()
+//     {
+//         cout << "intel的CPU开始计算了" << endl;
+//     }
+// };
+// class IntelVideoCard : public VideoCard
+// {
+// public:
+//     virtual void display()
+//     {
+//         cout << "intel的显卡开始显示了" << endl;
+//     }
+// };
+// class IntelMemory : public Memory
+// {
+// public:
+//     virtual void storage()
+//     {
+//         cout << "intel的内存条开始存储了" << endl;
+//     }
+// };
+// class LenovoCPU : public CPU
+// {
+// public:
+//     virtual void calculate()
+//     {
+//         cout << "Lenovo的CPU开始计算了" << endl;
+//     }
+// };
+// class LenovoVideoCard : public VideoCard
+// {
+// public:
+//     virtual void display()
+//     {
+//         cout << "Lenovo的显卡开始显示了" << endl;
+//     }
+// };
+// class LenovoMemory : public Memory
+// {
+// public:
+//     virtual void storage()
+//     {
+//         cout << "Lenovo的内存条开始存储了" << endl;
+//     }
+// };
 
-class Computer
-{
-public:
-    Computer(CPU *cpu, VideoCard *videocard, Memory *memory)
-    {
-        m_cpu = cpu;
-        m_videocard = videocard;
-        m_memory = memory;
-    }
-    void work()
-    {
-        m_cpu->calculate();
-        m_videocard->display();
-        m_memory->storage();
-    }
-    ~Computer()
-    {
-        if (m_cpu != NULL)
-        {
-            delete m_cpu;
-            cout << "...." << endl;
-        }
-        if (m_videocard != NULL)
-            delete m_videocard;
-        if (m_memory != NULL)
-            delete m_memory;
-    }
+// class Computer
+// {
+// public:
+//     Computer(CPU *cpu, VideoCard *videocard, Memory *memory)
+//     {
+//         m_cpu = cpu;
+//         m_videocard = videocard;
+//         m_memory = memory;
+//     }
+//     void work()
+//     {
+//         m_cpu->calculate();
+//         m_videocard->display();
+//         m_memory->storage();
+//     }
+//     ~Computer()
+//     {
+//         if (m_cpu != NULL)
+//         {
+//             delete m_cpu;
+//             cout << "...." << endl;
+//         }
+//         if (m_videocard != NULL)
+//             delete m_videocard;
+//         if (m_memory != NULL)
+//             delete m_memory;
+//     }
 
-private:
-    CPU *m_cpu;
-    VideoCard *m_videocard;
-    Memory *m_memory;
-};
+// private:
+//     CPU *m_cpu;
+//     VideoCard *m_videocard;
+//     Memory *m_memory;
+// };
 
-void test01()
-{
-    CPU *intelCPU = new IntelCPU;
-    VideoCard *intelcard = new IntelVideoCard;
-    Memory *intelmemory = new IntelMemory;
-    Computer *computer1 = new Computer(intelCPU, intelcard, intelmemory);
-    computer1->work();
-    delete computer1;
-}
-int main()
-{
-    test01();
-    system("pause");
-    return 0;
-}
+// void test01()
+// {
+//     CPU *intelCPU = new IntelCPU;
+//     VideoCard *intelcard = new IntelVideoCard;
+//     Memory *intelmemory = new IntelMemory;
+//     Computer *computer1 = new Computer(intelCPU, intelcard, intelmemory);
+//     computer1->work();
+//     delete computer1;
+// }
+// int main()
+// {
+//     test01();
+//     system("pause");
+//     return 0;
+// }
