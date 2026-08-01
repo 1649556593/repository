@@ -488,7 +488,7 @@ void test01()
 ```cpp
 int find(const string& str, int pos = 0) const;
 int find(const char* s, int pos = 0) const;
-int find(const char* s, int pos, int n) const;
+int find(const char* s, int pos, int n) const;//在字符串中查找字符在整段序列中第n次出现的位置下标。
 int find(const char c, int pos = 0) const;
 
 int rfind(const string& str, int pos = npos) const;
@@ -496,7 +496,7 @@ int rfind(const char* s, int pos = npos) const;
 int rfind(const char* s, int pos, int n) const;
 int rfind(const char c, int pos = 0) const;
 
-string& replace(int pos, int n, const string& str);
+string& replace(int pos, int n, const string& str);//把从pos开始的n个字符替换成str
 string& replace(int pos, int n, const char* s);
 ```
 
