@@ -1,6 +1,7 @@
 # 配置与初始化
 
 `git config --global user.name `"你的名字"：设置你的用户名，该名称会关联到你的提交记录。
+
 `git config --global user.email` "你的邮箱"：设置你的用户邮箱。
 `git init`：在当前目录初始化一个新的本地 Git 仓库。
 `git clone` <仓库地址>：将远程仓库克隆（复制）到本地。
