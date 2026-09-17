@@ -36,4 +36,5 @@
 `git stash pop`：恢复最近一次暂存的修改。
 `git reset <文件名>`：将文件从暂存区移出，但保留工作区的修改（取消 git add）。
 `git checkout -- <文件名>`：撤销工作区中指定文件的修改，恢复到上次提交的状态。
+`git push -u origin master --force`:直接把当前文件替换仓库内文件
 
