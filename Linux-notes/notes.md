@@ -142,4 +142,28 @@ tail [-f -num] Linux路径
 >set nu	显示行号
 >set paste	设置粘贴模式
 
+## 第三章 Linux用户和权限
+### 01 root用户
+Linux采用多用户的管理模式进行权限管理
+Linux系统中拥有最大权限账户名为root
+`su [-] [用户名]`
+-符号是可以多选的，表示是否在切换用户之后加载变量环境
+参数：用户名，表示要切换的用户，用户名也可以省略，省略表示要切到root
+切换用户名之后可以通过exit命令退回到上一个用户也可以用ctrl+d
+`sudo`
+在其他命令之前带上sudo可为这一条命令临时赋予root授权
+但是需要为普通用户配置sudo认证
+认证方法：切换root用户，执行visudo命令会自动通过vi编辑器打开：/etc/sudoers
+文件最后加 baijiahui1 ALL=(ALL) NOPASSWORD: ALL
+最后wq保存
 
+### 02 用户、用户组
+以下命令需要root用户执行
+·创建用户组  groupadd 用户组名
+·删除用户组  groupdel 用户组名
+·创建用户    useradd  用户名 -g 用户组名 -d HOME路径
+                -g指定用户的组，不指定-g会创建同名组并自动加入，指定-g需要组已经存在，如果存在同名组必须使用-g
+                -d指定用户HOME路径，不指定，HOME目录默认在:/home/用户名
+·删除用户    userdel [-r] 用户名
+                -r删除用户的HOME目录，不使用-r，删除用户时HOME目录保留
+·查看用户
