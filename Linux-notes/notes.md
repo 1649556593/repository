@@ -252,35 +252,39 @@ tail [-f -num] Linux路径
 
 - Linux采用多用户的管理模式进行权限管理。
 - Linux系统中拥有最大权限账户名为root。
+- Ubuntu默认禁用root账户的直接登录，安装系统时创建的第一个用户通常已经加入`sudo`组。
+- 需要root权限时，推荐在命令前使用`sudo`；需要临时进入root shell时使用`sudo -i`。
 
 #### `su [-] [用户名]`
 
 - `-` 符号是可以多选的，表示是否在切换用户之后加载变量环境。
-- 参数：用户名，表示要切换的用户，用户名也可以省略，省略表示要切到root。
+- 参数：用户名，表示要切换的用户。在Ubuntu中切换到root通常使用`sudo -i`。
 - 切换用户名之后可以通过 `exit` 命令退回到上一个用户也可以用 `ctrl+d`。
 
 #### `sudo`
 
 - 在其他命令之前带上 `sudo` 可为这一条命令临时赋予root授权。
-- 但是需要为普通用户配置sudo认证。
-- 认证方法：切换root用户，执行 `visudo` 命令会自动通过vi编辑器打开：`/etc/sudoers`。
-- 文件最后加：
+- 但是需要将普通用户加入`sudo`用户组，安装Ubuntu时创建的第一个用户通常已经完成配置。
+- 将用户加入`sudo`组：`sudo usermod -aG sudo 用户名`，重新登录后生效。
+- 如需配置免密码sudo，执行`sudo visudo -f /etc/sudoers.d/用户名`，加入：
 
 ```bash
-baijiahui1 ALL=(ALL) NOPASSWORD: ALL
+用户名 ALL=(ALL) NOPASSWD: ALL
 ```
 
 - 最后 `wq` 保存。
 
 ### 02 用户、用户组
 
-以下命令需要root用户执行。
+以下命令需要root权限，在Ubuntu中通常在命令前加`sudo`。
 
 - 创建用户组：`groupadd 用户组名`
 - 删除用户组：`groupdel 用户组名`
-- 创建用户：`useradd 用户名 -g 用户组名 -d HOME路径`
-  - `-g` 指定用户的组，不指定 `-g` 会创建同名组并自动加入，指定 `-g` 需要组已经存在，如果存在同名组必须使用 `-g`。
-  - `-d` 指定用户HOME路径，不指定，HOME目录默认在：`/home/用户名`。
+- Ubuntu推荐使用`adduser 用户名`创建用户，它会引导设置密码并自动创建HOME目录。
+- 也可以使用底层命令：`useradd -m 用户名`
+  - `-m` 创建用户的HOME目录。
+  - `-g` 指定用户的主组，指定的用户组需要已经存在。
+  - `-d` 指定用户HOME路径，不指定时通常为：`/home/用户名`。
 - 删除用户：`userdel [-r] 用户名`
   - `-r` 删除用户的HOME目录，不使用 `-r`，删除用户时HOME目录保留。
 - 查看用户
@@ -340,13 +344,22 @@ baijiahui1 ALL=(ALL) NOPASSWORD: ALL
 
 ### 02 程序安装
 
-`yum`自动化安装配置Linux软件并可以自动解决依赖问题
+Ubuntu使用`apt`管理软件，可以自动处理软件依赖；软件安装包格式为`.deb`。
 
-`yum [-y] [install | remove | search] 软件名称`
+| 操作 | Ubuntu命令 |
+| --- | --- |
+| 更新软件源索引 | `sudo apt update` |
+| 升级已安装的软件 | `sudo apt upgrade` |
+| 安装软件 | `sudo apt install 软件名称` |
+| 删除软件 | `sudo apt remove 软件名称` |
+| 删除软件及其配置 | `sudo apt purge 软件名称` |
+| 搜索软件 | `apt search 软件名称` |
+| 清理不再需要的依赖 | `sudo apt autoremove` |
 
-- yum命令需要root权限或sudo提权，需要联网
-- centOS：.rpm软件安装包，yum自动安装器(yum软件仓库里面存放了打包好的软件安装包)
-- Ubuntu：.deb软件安装包，apt自动安装器
+- `apt install`、`apt remove`等修改系统的操作需要使用`sudo`并且需要联网。
+- 使用`-y`可以自动确认，例如：`sudo apt install -y 软件名称`。
+- 安装本地`.deb`软件包：`sudo apt install ./软件包.deb`，`apt`会同时处理依赖。
+- 也可以使用`sudo dpkg -i 软件包.deb`安装，但`dpkg`不会自动解决依赖。
 
 ### 03 systemctl命令
 
@@ -398,9 +411,11 @@ baijiahui1 ALL=(ALL) NOPASSWORD: ALL
 | %S | 秒 <00,60> |
 | %s | 自 1970-01-01 00:00:00 UTC 到现在的秒数 |
 
-也可以通过ntp程序自动校准系统时间
+Ubuntu默认通过`systemd-timesyncd`自动校准系统时间。
 
-也可手动校准 ntpdate -u ntp.aliyun.com
+- 查看时间和同步状态：`timedatectl status`
+- 开启自动时间同步：`sudo timedatectl set-ntp true`
+- 设置时区：`sudo timedatectl set-timezone Asia/Shanghai`
 
 ### 06 IP地址和主机名
 
@@ -412,7 +427,7 @@ baijiahui1 ALL=(ALL) NOPASSWORD: ALL
 >
 > IPv4地址格式a.b.c.d其中abcd表示0~255的数字
 
-- 可以通过ifconfig查看本机ip地址
+- 可以通过`ip addr`或简写`ip a`查看本机ip地址
 - 127.0.0.1 这个IP地址用于指代本机
 - 0.0.0.0, 特殊IP地址
   - 可以用于指代本机，可以在端口绑定中用来确定绑定关系
@@ -433,11 +448,41 @@ IP地址难以记忆，通过字符化的地址访问服务器，很少指定IP�
 
 虚拟机IP地址是通过DHCP(动态获取IP地址，即每次重启都会重新获取一次可能会导致IP地址频繁变更)
 
+Ubuntu Server通常使用Netplan配置网络，配置文件位于`/etc/netplan/`目录。
+
+1. 使用`ip a`查看网卡名称，例如`ens33`。
+2. 使用`ls /etc/netplan/`查看实际配置文件名。
+3. 使用`sudo vim /etc/netplan/配置文件.yaml`编辑配置，示例：
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    ens33:
+      dhcp4: false
+      addresses:
+        - 192.168.10.10/24
+      routes:
+        - to: default
+          via: 192.168.10.2
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 114.114.114.114
+```
+
+- `ens33`、IP地址、网关和DNS需要根据VMware虚拟网络的实际配置修改。
+- YAML使用空格缩进，不能使用Tab。
+- 测试配置：`sudo netplan try`
+- 应用配置：`sudo netplan apply`
+- Ubuntu Desktop的网络通常由NetworkManager管理，也可以在系统设置的网络界面中配置固定IP。
+
 ### 08 网络传输
 
 #### ping命令
 
 - 检查指定的网络服务器是否是可联通状态
+- 如果系统未安装：`sudo apt install iputils-ping`
 
 `ping [-c num] ip或主机名`
 
@@ -447,6 +492,7 @@ IP地址难以记忆，通过字符化的地址访问服务器，很少指定IP�
 #### wget命令
 
 - 非交互式的文件下载器，可以在命令行内下载网络文件
+- 如果系统未安装：`sudo apt install wget`
 
 `wget [-b] url`
 
@@ -455,6 +501,7 @@ IP地址难以记忆，通过字符化的地址访问服务器，很少指定IP�
 
 #### curl命令
 
+- 如果系统未安装：`sudo apt install curl`
 - 向cip.cc发起网络请求，curl cip.cc
 - 通过curl下载安装包
 
@@ -469,9 +516,9 @@ Linux系统是一个超大号小区, 可以支持65535个端口, 这6万多个�
 - 注册端口:1024~49151, 通常可以随意使用, 用于松散的绑定一些程序\服务
 - 动态端口:49152~65535, 通常不会固定绑定程序, 而是当程序对外进行网络链接时, 用于临时使用。
 
-`nmap IP`指令可以查看对应ip地址对外暴露端口
+`nmap IP`指令可以查看对应ip地址对外暴露端口，如果系统未安装：`sudo apt install nmap`
 
-`netstat -anp | grep 端口号`可以查看指定端口占用情况
+`sudo ss -lntup | grep 端口号`可以查看指定端口占用情况
 
 #### 进程管理
 
@@ -560,6 +607,8 @@ top交互式选项
 
 #### 磁盘信息监控
 
+Ubuntu需要先安装`sysstat`：`sudo apt install sysstat`
+
 `df [-h]`
 
 - 使用`df`命令可以查看硬盘使用情况
@@ -588,6 +637,8 @@ top交互式选项
 | %util | 磁盘利用率 |
 
 #### 查看网络情况
+
+`sar`由`sysstat`软件包提供：`sudo apt install sysstat`
 
 `sar -n DEV num1 num2`
 
@@ -637,7 +688,7 @@ Linux环境变量可以用户自己设置
 
 可以把文件文件夹传输到本地电脑
 
-`yum -y install lrzsz`安装rz和sz
+`sudo apt update && sudo apt install -y lrzsz`安装rz和sz
 
 - sz下载文件
 - rz上传文件（速度很慢，不如拖拽）
@@ -655,6 +706,9 @@ Linux环境变量可以用户自己设置
 - gzip: Linux、MacOS常用
 
 #### 使用zip、unzip命令压缩或解压缩zip文件
+
+如果系统未安装：`sudo apt install zip unzip`
+
 Linux和Mac系统常用有两种压缩格式，后缀名分别是:
 .tar，称之为tarball，归档文件，即简单的将文件组装到一个.tar的文件夹内，并没有太多文件体积减少，仅仅是简单的封装
 .gz，也常见为.tar.gz，gzip格式压缩文件，即使用gzip压缩算法将文件压缩到一个文件内，可以极大减少压缩后的体积
