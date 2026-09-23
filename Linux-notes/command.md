@@ -732,12 +732,17 @@ Linux和Mac系统常用有两种压缩格式，后缀名分别是:
 - -f, 要创建的文件，或要解压的文件，-f选项必须在所有选项中位置处于最后一个
 - -z, -z, gzip模式，不使用-z就是普通的tarball格式
 - -C, 选择解压的目的地，用于解压模式
->一般有固定格式 `tar -cvf`压缩 `tar -xvf 解压文件 -C 解压至指定的目录` ,如果要解压成gzip文件就要带-z
+>一般有固定格式 `tar -zcvf`压缩 `tar -xvf 解压文件 -C 解压至指定的目录` ,如果要解压成gzip文件就要带-z
 `zip [-r] 参数1 参数2 参数N `
 - -r被压缩的包含文件夹的时候，需要使用-r选项，和rm，cp等一致
 `unzip [-d] 参数` 解压zip压缩包
 
 ```c
+软硬连接
+硬
+ln 原文件 新文件
+软
+ln -s 原文件 新文件
 inode（索引节点）是类Unix/Linux文件系统中用于描述文件属性和数据位置的核心数据结构，本质上是文件系统中的结构体。 每个文件或目录在文件系统中都有一个唯一的inode编号（inumber）作为唯一标识，系统内部通过inode编号而非文件名来识别和管理文件。
 inode存储的内容
 inode中存储的是文件的元数据（metadata），具体包括：
@@ -771,7 +776,13 @@ find atime=access time 访问时间 mtime=modify time 修改文件属性时间 c
 -type 按文件类型搜索
 -maxdepth指定搜索深度
 -size按文件大小搜索
-  
+`-exec ls -l { } \;`找到的结果执行后面的命令
+`find....... | -xargs ls -l`效果与上面的一样
+xargs会进行分片处理，当结果集数量过大时，可以分片映射
+`-ok rm -r {} \;`以交互式的方式执行后面的命令
+-print0,不写默认打印拆分依据是‘ ’,写了之后拆分依据是'\0'
+xargs -0表示按照'\0'读取
+
 文件类型
 普通文件-
 目录文件d
@@ -781,3 +792,73 @@ find atime=access time 访问时间 mtime=modify time 修改文件属性时间 c
 管道文件p
 套接字s
 未知文件
+
+安装deb软件包命令：sudo dpkg -i xxx.deb
+删除软件包命令：sudo dpkg -r xxx.deb
+连同配置文件一起删除命令：sudo dpkg -r --purge xxx.deb
+查看软件包信息命令：sudo dpkg -info xxx.deb
+查看文件拷贝详情命令：sudo dpkg -L xxx.deb
+查看系统中已安装软件包信息命令：sudo dpkg -l
+重新配置软件包命令：sudo dpkg-reconfigure xxx
+
+源码安装
+1. 解压缩源代码包
+2. cd dir
+3. ./configure
+检查文件是否缺失，创建Makefile检测编译环境
+4. make，编译源码，生成库和可执行文件
+5. sudo make install
+把库和可执行程序，安装到系统路径下
+6. sudo make distclean
+删除和卸载软件
+
+压缩：
+tar -zcvf 要生成的压缩包名 压缩材料。
+tar zcvf test.tar.gz file1 dir2 使用 gzip方式压缩。
+tar jcvf test.tar.gz file1 dir2 使用 bzip2方式压缩。
+解压：
+将 压缩命令中的 c --> x
+
+rar 
+把dir压缩成newdir.rar
+rar a -r newdir dir
+unrar x newdir.rar
+
+umask掩码，表示减了什么权限，普通文件默认666，目录为777，减去umask为最终的权限
+一共四位，第一位是八进制前导0
+
+man
+卷1：命令
+卷2：系统调用
+卷3：库函数
+卷5：文件存储格式
+
+vim
+跳转到指定行：number+G（命令模式）
+             number(末行模式)
+跳转首行gg
+跳转尾行GG
+自动调整gg=G
+大括号对应%
+删除单个字符 x
+删一个单词 dw
+删除光标到结尾 D
+删除光标到行首 d0 
+跳转行首 0
+跳转行尾 $
+替换字符 r+新字符
+删除所在行 dd
+删除指定n行 number+dd
+复制行 yy
+粘贴 p向后，P向前
+查找 找设想内容 / 输入搜索关键字，回车，使用n检索下一个
+     找看到的内容，将光标放在单词上按*或#
+替换：将光标置于待替换行，进入末行模式输入：s /原数据/新数据（末行模式）
+      指定行：number,number's' /原数据/新数据
+撤销：命令模式下按u(命令)
+反撤销：CTRL+r（命令）
+分屏：sp ctrl+ww切换
+竖屏分：vsp
+将光标置于待查看函数单词上使用K跳转命令手册
+查看宏定义：'[d'
+末行模式执行命令：!+命令
