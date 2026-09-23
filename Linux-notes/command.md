@@ -766,3 +766,18 @@ ls -i：查看文件的inode编号
 stat：查看文件的详细inode信息
 df -i：查看文件系统的inode使用情况
 ```
+
+find atime=access time 访问时间 mtime=modify time 修改文件属性时间 ctime=change time 修改文件内容时间
+-type 按文件类型搜索
+-maxdepth指定搜索深度
+-size按文件大小搜索
+  
+文件类型
+普通文件-
+目录文件d
+字符设备文件c
+块设备文件b
+软连接l
+管道文件p
+套接字s
+未知文件
