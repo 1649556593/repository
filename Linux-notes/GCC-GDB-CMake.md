@@ -4,7 +4,7 @@
 
 ### 01 编译过程
 
-#### 预处理（Pre-processing）
+**预处理（Pre-processing）**
 >展开宏，头文件，替换条件编译，删除注释、空行、空白
 生成`.i`文件：
 
@@ -14,7 +14,7 @@ g++ -E test.cpp -o test.i
 
 - `-E`：只进行预处理。
 
-#### 编译（Compiling）
+**编译（Compiling）**
 >检查语法规范
 生成`.s`汇编文件：
 
@@ -24,7 +24,7 @@ g++ -S test.i -o test.s
 
 - `-S`：生成汇编文件。
 
-#### 汇编（Assembling）
+**汇编（Assembling）**
 >将汇编指令翻译成机器指令
 生成`.o`目标文件：
 
@@ -34,7 +34,7 @@ g++ -c test.s -o test.o
 
 - `-c`：把源代码编译为机器语言的目标代码文件。
 
-#### 链接（Linking）
+**链接（Linking）**
 >数据段合并，数据地址回填
 生成可执行文件：
 
@@ -44,7 +44,7 @@ g++ test.o -o test
 >-o是用来起名的
 ### 02 GCC 编译选项
 
-#### `-g`：生成调试信息
+**`-g`：生成调试信息**
 
 `-g`选项告诉GCC生成可以被GNU调试器GDB使用的调试信息。
 
@@ -52,7 +52,7 @@ g++ test.o -o test
 g++ -g test.cpp -o test
 ```
 
-#### `-O[n]`：优化源代码
+**`-O[n]`：优化源代码**
 
 优化会省略代码中从未使用的变量、直接使用常量表达式的结果等，从而缩减目标文件中的代码量，提高可执行文件的运行效率。
 
@@ -70,7 +70,7 @@ g++ -g test.cpp -o test
 g++ -O2 test.cpp
 ```
 
-#### `-l`和`-L`：指定库与库文件路径
+**`-l`和`-L`：指定库与库文件路径**
 
 ```bash
 # -l参数（小写）用于指定要链接的库，参数后紧接库名
@@ -84,7 +84,7 @@ g++ -lglog test.cpp
 g++ -L/home/bing/mytestlibfolder -lmytest test.cpp
 ```
 
-#### `-I`：指定头文件搜索目录
+**`-I`：指定头文件搜索目录**
 
 `/usr/include`目录通常不需要指定。如果头文件不在默认目录中，则需要使用`-I`指定搜索路径，否则会出现`xxxx.h: No such file or directory`错误。`-I`也可以使用相对路径，例如用`-I.`指定当前目录。
 
@@ -92,25 +92,25 @@ g++ -L/home/bing/mytestlibfolder -lmytest test.cpp
 g++ -I/myinclude test.cpp
 ```
 
-#### `-Wall`：打印警告信息
+**`-Wall`：打印警告信息**
 
 ```bash
 g++ -Wall test.cpp
 ```
 
-#### `-w`：关闭警告信息
+**`-w`：关闭警告信息**
 
 ```bash
 g++ -w test.cpp
 ```
 
-#### `-std=c++11`：指定C++标准
+**`-std=c++11`：指定C++标准**
 
 ```bash
 g++ -std=c++11 test.cpp
 ```
 
-#### `-o`：指定输出文件名
+**`-o`：指定输出文件名**
 
 不使用`-o`时，默认生成`a.out`。
 
@@ -118,7 +118,7 @@ g++ -std=c++11 test.cpp
 g++ test.cpp -o test
 ```
 
-#### `-DDEBUG`：定义宏
+**`-DDEBUG`：定义宏**
 
 `-Dname`用于定义宏`name`，默认值为`1`。
 
@@ -140,7 +140,7 @@ int main()
 g++ -DDEBUG main.cpp
 ```
 
-#### 查看GCC手册
+**查看GCC手册**
 
 ```bash
 man gcc
@@ -207,7 +207,7 @@ ADD_EXECUTABLE(hello main.cpp ${HELLO})
 
 ### 02 重要指令
 
-#### `cmake_minimum_required`：指定CMake最低版本
+**`cmake_minimum_required`：指定CMake最低版本**
 
 ```cmake
 # 语法：cmake_minimum_required(VERSION versionNumber [FATAL_ERROR])
@@ -215,7 +215,7 @@ ADD_EXECUTABLE(hello main.cpp ${HELLO})
 cmake_minimum_required(VERSION 2.8.3)
 ```
 
-#### `project`：定义工程名称和支持的语言
+**`project`：定义工程名称和支持的语言**
 
 ```cmake
 # 语法：project(projectname [CXX] [C] [Java])
@@ -223,7 +223,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(HELLOWORLD)
 ```
 
-#### `set`：显式定义变量
+**`set`：显式定义变量**
 
 ```cmake
 # 语法：set(VAR [VALUE] [CACHE TYPE DOCSTRING [FORCE]])
@@ -231,7 +231,7 @@ project(HELLOWORLD)
 set(SRC main.cpp sayhello.cpp hello.cpp)
 ```
 
-#### `include_directories`：添加头文件搜索路径
+**`include_directories`：添加头文件搜索路径**
 
 相当于指定`g++`编译器的`-I`参数。
 
@@ -241,7 +241,7 @@ set(SRC main.cpp sayhello.cpp hello.cpp)
 include_directories(/usr/include/myincludefolder ./include)
 ```
 
-#### `link_directories`：添加库文件搜索路径
+**`link_directories`：添加库文件搜索路径**
 
 相当于指定`g++`编译器的`-L`参数。
 
@@ -251,7 +251,7 @@ include_directories(/usr/include/myincludefolder ./include)
 link_directories(/usr/lib/mylibfolder ./lib)
 ```
 
-#### `add_library`：生成库文件
+**`add_library`：生成库文件**
 
 ```cmake
 # 语法：add_library(libname [SHARED|STATIC|MODULE] [EXCLUDE_FROM_ALL] source1 ... sourceN)
@@ -259,7 +259,7 @@ link_directories(/usr/lib/mylibfolder ./lib)
 add_library(hello SHARED ${SRC})
 ```
 
-#### `add_compile_options`：添加编译参数
+**`add_compile_options`：添加编译参数**
 
 ```cmake
 # 语法：add_compile_options(<option> ...)
@@ -267,7 +267,7 @@ add_library(hello SHARED ${SRC})
 add_compile_options(-Wall -std=c++11 -O2)
 ```
 
-#### `add_executable`：生成可执行文件
+**`add_executable`：生成可执行文件**
 
 ```cmake
 # 语法：add_executable(exename source1 source2 ... sourceN)
@@ -275,7 +275,7 @@ add_compile_options(-Wall -std=c++11 -O2)
 add_executable(main main.cpp)
 ```
 
-#### `target_link_libraries`：为目标添加需要链接的库
+**`target_link_libraries`：为目标添加需要链接的库**
 
 相当于指定`g++`编译器的`-l`参数。
 
@@ -285,7 +285,7 @@ add_executable(main main.cpp)
 target_link_libraries(main hello)
 ```
 
-#### `add_subdirectory`：添加源文件子目录
+**`add_subdirectory`：添加源文件子目录**
 
 向当前工程添加存放源文件的子目录，也可以指定中间二进制文件和目标二进制文件的存放位置。子目录中需要包含一个`CMakeLists.txt`文件。
 
@@ -295,7 +295,7 @@ target_link_libraries(main hello)
 add_subdirectory(src)
 ```
 
-#### `aux_source_directory`：收集目录中的源代码文件
+**`aux_source_directory`：收集目录中的源代码文件**
 
 发现指定目录下的所有源代码文件，并将列表存储在变量中，常用于临时自动构建源文件列表。
 
@@ -310,7 +310,7 @@ add_executable(main ${SRC})
 
 ### 03 CMake常用变量
 
-#### 编译选项变量
+**编译选项变量**
 
 | 变量 | 说明 |
 | --- | --- |
@@ -322,7 +322,7 @@ add_executable(main ${SRC})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ```
 
-#### 编译类型
+**编译类型**
 
 `CMAKE_BUILD_TYPE`用于设置编译类型，如`Debug`或`Release`。
 
@@ -334,7 +334,7 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
 ```
 
-#### 二进制目录变量
+**二进制目录变量**
 
 | 变量 | 说明 |
 | --- | --- |
@@ -347,13 +347,13 @@ set(CMAKE_BUILD_TYPE Release)
 - 外部构建（out-of-source build）时，指向工程构建发生的目录。
 - `PROJECT_BINARY_DIR`与其他变量稍有区别，当前可以先理解为一致。
 
-#### 源代码目录变量
+**源代码目录变量**
 
 | 变量 | 说明 |
 | --- | --- |
 | `CMAKE_SOURCE_DIR` | 顶层`CMakeLists.txt`所在的源代码目录 |
 
-#### 编译器与输出路径变量
+**编译器与输出路径变量**
 
 | 变量 | 说明 |
 | --- | --- |
@@ -388,7 +388,7 @@ set(CMAKE_BUILD_TYPE Release)
 
 ### 06 两种构建方式
 
-#### 内部构建（in-source build）
+**内部构建（in-source build）**
 
 不推荐使用。内部构建会在源代码目录中产生大量中间文件，使工程目录显得杂乱。
 
@@ -400,7 +400,7 @@ cmake .
 make
 ```
 
-#### 外部构建（out-of-source build）
+**外部构建（out-of-source build）**
 
 推荐使用。外部构建将编译输出文件与源文件放在不同目录中。
 
